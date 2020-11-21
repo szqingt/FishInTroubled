@@ -1,12 +1,10 @@
-import React, { useState } from 'react';
-import { View, Text } from 'react-native';
+import React from 'react';
+import {View, Text} from 'react-native';
 
 const Listen: React.FC = () => (
-    <View>
-        <Text>
-            Listen
-        </Text>
-    </View>
-)
+  <View>
+    <Text>Listen</Text>
+  </View>
+);
 
-export default Listen
+export default Listen;

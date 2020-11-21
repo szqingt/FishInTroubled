@@ -15,6 +15,7 @@
     "@react-navigation/material-top-tabs": "^5.3.9",
     "@react-navigation/native": "^5.8.7",
     "@react-navigation/stack": "^5.12.4",
+    "axios": "^0.21.0",
     "react": "16.13.1",
     "react-native": "0.63.3",
     "react-native-gesture-handler": "^1.8.0",
@@ -23,7 +24,10 @@
     "react-native-screens": "^2.13.0",
     "react-native-snap-carousel": "^3.9.1",
     "react-native-svg": "^12.1.0",
-    "react-native-tab-view": "^2.15.2"
+    "react-native-tab-view": "^2.15.2",
+    "react-redux": "^7.2.2",
+    "redux": "^4.0.5",
+    "redux-thunk": "^2.3.0"
   },
   "devDependencies": {
     "@babel/core": "^7.8.4",
@@ -32,6 +36,7 @@
     "@types/jest": "^25.2.3",
     "@types/react-native": "^0.63.2",
     "@types/react-native-snap-carousel": "^3.8.2",
+    "@types/react-redux": "^7.1.11",
     "@types/react-test-renderer": "^16.9.2",
     "@typescript-eslint/eslint-plugin": "^2.27.0",
     "@typescript-eslint/parser": "^2.27.0",
