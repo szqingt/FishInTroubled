@@ -6,6 +6,7 @@ import SnapCarousel, {
   AdditionalParallaxProps,
   Pagination as SnapPagination,
 } from 'react-native-snap-carousel';
+import {LOGO_URL} from '@config/consts';
 
 const sliderWidth = viewportWidth;
 const slideWidht = wp(90);
@@ -16,9 +17,10 @@ const CarouselItem = (
   {item}: {item: ICarousel},
   parallaxProps?: AdditionalParallaxProps,
 ) => {
+  const url = item.title_file_url || LOGO_URL;
   return (
     <ParallaxImage
-      source={{uri: item.title_file_url}}
+      source={{uri: url}}
       style={styles.image}
       containerStyle={styles.imageContainer}
       parallaxFactor={0.8}

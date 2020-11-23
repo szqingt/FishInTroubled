@@ -9,22 +9,23 @@ import {
   useRoute,
   getFocusedRouteNameFromRoute,
 } from '@react-navigation/native';
-import {RootStackParmList} from 'navigator';
+import {MainStackParmList, RootStackParmList} from 'navigator';
 import {StackNavigationProp} from '@react-navigation/stack';
 import HomeTabs from './HomeTabs';
+import Home from '@pages/Home';
 type BottomTabParmList = {
-  HomeTabs: undefined;
+  Home: undefined;
   Listen: undefined;
   MyAccount: undefined;
 };
-type BottomTabsRouteProp = RouteProp<RootStackParmList, 'BottomTabs'>;
+type BottomTabsRouteProp = RouteProp<RootStackParmList, 'MainStackParmList'>;
 
 const {Navigator, Screen} = createBottomTabNavigator<BottomTabParmList>();
 
 const getTitleName = (route: BottomTabsRouteProp): string => {
   const routeName = getFocusedRouteNameFromRoute(route) || 'HomeTabs';
   switch (routeName) {
-    case 'HomeTabs':
+    case 'Home':
       return '首页';
     case 'Listen':
       return '我听';
@@ -37,7 +38,7 @@ const getTitleName = (route: BottomTabsRouteProp): string => {
 
 const BottomTabs: React.FC = () => {
   const navigation = useNavigation<
-    StackNavigationProp<RootStackParmList, 'BottomTabs'>
+    StackNavigationProp<MainStackParmList, 'BottomTabs'>
   >();
   const route = useRoute<BottomTabsRouteProp>();
 
@@ -51,8 +52,8 @@ const BottomTabs: React.FC = () => {
         activeTintColor: '#f86442',
       }}>
       <Screen
-        name="HomeTabs"
-        component={HomeTabs}
+        name="Home"
+        component={Home}
         options={{
           tabBarLabel: '首页',
           tabBarIcon: ({color, size}) => (

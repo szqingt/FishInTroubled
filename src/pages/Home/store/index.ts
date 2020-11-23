@@ -3,4 +3,6 @@ export interface IHomeState {
   carouselList: [];
 }
 import home from '@pages/Home/store/reducer';
-export default home;
+export default {
+  home,
+};

@@ -1,11 +1,11 @@
 import {SET_CAROUSEL_DATA} from './index';
 import {IHomeState} from './index';
 
-export const initialState: IHomeState = {
+export const initState: IHomeState = {
   carouselList: [],
 };
 
-export default (state = initialState, {type, playload}: IAction<[]>) => {
+export default (state = initState, {type, playload}: IAction<[]>) => {
   switch (type) {
     case SET_CAROUSEL_DATA:
       state = {...state, ...{carouselList: playload}};

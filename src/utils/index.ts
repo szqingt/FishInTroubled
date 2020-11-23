@@ -1,5 +1,4 @@
-import {Dimensions} from 'react-native';
-
+import {Dimensions, StatusBar} from 'react-native';
 const {width: viewportWidth, height: viewportHeight} = Dimensions.get('window');
 
 function reversPercen(val: number): number {
@@ -14,4 +13,6 @@ function hp(percentage: number) {
   return reversPercen(percentage * viewportHeight);
 }
 
-export {viewportWidth, viewportHeight, wp, hp};
+const statusBarHeight = StatusBar.currentHeight;
+
+export {viewportWidth, viewportHeight, wp, hp, statusBarHeight};

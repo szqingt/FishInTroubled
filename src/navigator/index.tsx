@@ -5,10 +5,17 @@ import {
   StackNavigationProp,
 } from '@react-navigation/stack';
 import BottomTabs from './BottomTabs';
-import Detail from '@pages/Detail';
+import ModalStack, {ModalStackParmList} from './ModalStack';
 import {StatusBar} from 'react-native';
 
 export type RootStackParmList = {
+  MainStackParmList: ModalStackParmList;
+  ModalStackParmList: {
+    id: Number;
+  };
+};
+
+export type MainStackParmList = {
   BottomTabs: undefined;
   Detail: {
     id: Number;
@@ -27,13 +34,15 @@ const StackNavigator: React.FC = () => (
         headerTitleAlign: 'center',
         headerStatusBarHeight: StatusBar.currentHeight,
       }}>
-      <Screen name="BottomTabs" component={BottomTabs} />
       <Screen
-        name="Detail"
-        component={Detail}
-        options={{
-          headerTitle: '详情',
-        }}
+        name="MainStackParmList"
+        component={BottomTabs}
+        options={{headerShown: false}}
+      />
+      <Screen
+        name="ModalStackParmList"
+        component={ModalStack}
+        options={{headerShown: false}}
       />
     </Navigator>
   </NavigationContainer>
