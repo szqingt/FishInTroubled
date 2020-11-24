@@ -993,6 +993,12 @@
     sudo-prompt "^9.0.0"
     wcwidth "^1.0.1"
 
+"@react-native-community/cookies@^5.0.1":
+  version "5.0.1"
+  resolved "https://registry.npm.taobao.org/@react-native-community/cookies/download/@react-native-community/cookies-5.0.1.tgz#1ffeefc31d51b7296ae0b5bfb249deb43fcbbcea"
+  dependencies:
+    invariant "^2.2.4"
+
 "@react-native-community/eslint-config@^1.1.0":
   version "1.1.0"
   resolved "https://registry.npm.taobao.org/@react-native-community/eslint-config/download/@react-native-community/eslint-config-1.1.0.tgz#2dacad06dd44d13e778510864473fc6091f080c0"
