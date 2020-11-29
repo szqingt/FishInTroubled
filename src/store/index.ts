@@ -5,6 +5,8 @@ import {initState as homeStats} from '@pages/Home/store/reducer';
 import {IHomeState} from '@pages/Home/store';
 import {ILoadingState, initState as lodingState} from './loading';
 import {IUserState, initState as userState} from './user';
+import {persistReducer, persistStore} from 'redux-persist';
+import AsyncStorage from '@react-native-community/async-storage';
 let middleware = [thunk];
 
 export interface IStore {
@@ -19,14 +21,28 @@ const initialState: IStore = {
   user: userState,
 };
 
+const persistConfig = {
+  key: 'root',
+  storage: AsyncStorage,
+  whitelist: ['user'],
+};
+
+const persistedReducer = persistReducer(persistConfig, rootReducer);
+
 function configureStore() {
   const store = createStore(
-    rootReducer,
+    persistedReducer,
     initialState,
     compose(applyMiddleware(...middleware)),
   );
 
-  return store;
+  const persistor = persistStore(store);
+
+  return {store, persistor};
 }
 
-export default configureStore();
+const storeInfo = configureStore();
+
+export const persistor = storeInfo.persistor;
+
+export default storeInfo.store;

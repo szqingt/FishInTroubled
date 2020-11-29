@@ -12,6 +12,7 @@ const sliderWidth = viewportWidth;
 const slideWidht = wp(90);
 const slideHeight = wp(35);
 const itemWidth = slideWidht + wp(2) * 2;
+const MAX_ITEM = 6;
 
 const CarouselItem = (
   {item}: {item: ICarousel},
@@ -64,10 +65,11 @@ type IProps = {
 
 const Carousel: React.FC<IProps> = ({data}) => {
   const [slideIndex, setIndex] = useState<number>(0);
+  const itemList = data.length >= MAX_ITEM ? data.slice(0, MAX_ITEM) : data;
   return (
     <>
       <SnapCarousel
-        data={data}
+        data={itemList}
         renderItem={CarouselItem}
         sliderWidth={sliderWidth}
         itemWidth={itemWidth}
@@ -76,7 +78,7 @@ const Carousel: React.FC<IProps> = ({data}) => {
         onSnapToItem={setIndex}
       />
 
-      <Pagination activeIndex={slideIndex} size={data.length} />
+      <Pagination activeIndex={slideIndex} size={itemList.length} />
     </>
   );
 };

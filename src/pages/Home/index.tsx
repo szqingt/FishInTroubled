@@ -1,28 +1,104 @@
-import React, {useEffect} from 'react';
-import {View, Text, Button} from 'react-native';
-import Carousel from './Carousel';
-import {getCarousel} from './store/action';
+import React, {useEffect, useState} from 'react';
+import {
+  FlatList,
+  ListRenderItemInfo,
+  StyleSheet,
+  Text,
+  View,
+} from 'react-native';
+import {IQueryParams, queryAlbumList} from './store/action';
 import {useDispatch, useSelector} from 'react-redux';
-import {getAllCookie} from '@utils/cookie';
+import AlbumItem from './AlbumList';
+import Empty from '@components/Empty';
+import {Album} from './store/reducer';
 
 const Home: React.FC = () => {
-  const home = useSelector((store) => store.home);
+  const {albumList} = useSelector((store) => store.home);
+  const [isLoading, setLoading] = useState(false);
   const dispatch = useDispatch();
+  console.log('render Home');
+  const [queryParams, setQueryParams] = useState<IQueryParams>({
+    aclassify_id: 3,
+    page: 1,
+    keyword: '',
+    loadMore: false,
+  });
   useEffect(() => {
-    getCarousel({aclassify_id: 3, page: 1, keyword: ''})(dispatch);
-  }, [dispatch]);
+    if (isLoading || (albumList.length >= 100 && queryParams.loadMore)) {
+      return;
+    }
+    setLoading(true);
+    queryAlbumList(queryParams)(dispatch).then(() => {
+      setLoading(false);
+    });
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [queryParams]);
+
+  const onRefresh = () => {
+    setQueryParams({
+      ...queryParams,
+      keyword: '',
+      page: 1,
+      loadMore: false,
+    });
+  };
+
+  const onEndReached = () => {
+    const page = queryParams.page + 1;
+    setQueryParams({
+      ...queryParams,
+      page,
+      loadMore: true,
+    });
+  };
+
+  // const navigation = useNavigation();
+  const onPress = (item: Album) => {
+    // navigation.navigate('Album', {item});
+    // todo go details
+    console.log(item);
+  };
+
+  const WrapAlbumItem = ({item}: ListRenderItemInfo<Album>) => {
+    return <AlbumItem item={item} onPress={onPress} />;
+  };
+  const renderFooter = () => {
+    if (albumList.length >= 100) {
+      return (
+        <View style={styles.endContainer}>
+          <Text style={styles.endText}>没有更多了...</Text>
+        </View>
+      );
+    }
+    return null;
+  };
+
   return (
-    <View>
-      <Text>Home</Text>
-      <Button
-        title="loading"
-        onPress={() => {
-          getAllCookie();
-        }}
-      />
-      <Carousel data={home.carouselList} />
-    </View>
+    <FlatList
+      style={styles.flatList}
+      data={albumList}
+      renderItem={WrapAlbumItem}
+      refreshing={isLoading}
+      onRefresh={onRefresh}
+      onEndReached={onEndReached}
+      ListFooterComponent={renderFooter}
+      onEndReachedThreshold={0.1}
+      ListEmptyComponent={Empty}
+    />
   );
 };
+
+const styles = StyleSheet.create({
+  flatList: {
+    flex: 1,
+  },
+  endContainer: {
+    margin: 10,
+    alignItems: 'center',
+  },
+  endText: {
+    color: '#eee',
+  },
+});
 
 export default Home;

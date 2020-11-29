@@ -18,7 +18,7 @@ const Loading: React.FC = () => {
     <ActivityIndicator
       animating={loadingState.status}
       size="large"
-      color="#0000ff"
+      color="#f86442"
       style={styles.loading}
     />
   ) : null;

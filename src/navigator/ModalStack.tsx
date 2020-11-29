@@ -1,9 +1,9 @@
 import React from 'react';
 import {createStackNavigator, TransitionPresets} from '@react-navigation/stack';
 import {statusBarHeight} from '@utils/index';
+import Login from '@pages/Login';
 
 export type ModalStackParmList = {
-  Loading: undefined;
   Login: undefined;
 };
 
@@ -21,13 +21,7 @@ const ModalStack: React.FC = () => (
       headerStatusBarHeight: statusBarHeight,
       headerBackTitleVisible: false,
     })}>
-    <Screen
-      name="Login"
-      component={() => <></>}
-      options={{
-        headerTitle: '登录',
-      }}
-    />
+    <Screen name="Login" component={Login} options={{headerShown: false}} />
   </Navigator>
 );
 

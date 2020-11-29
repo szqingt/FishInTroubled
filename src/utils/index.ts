@@ -15,4 +15,19 @@ function hp(percentage: number) {
 
 const statusBarHeight = StatusBar.currentHeight;
 
-export {viewportWidth, viewportHeight, wp, hp, statusBarHeight};
+function transfromFromData(data: any): FormData {
+  const params = new FormData();
+  Object.keys(data).forEach((key) => {
+    params.append(key, data[key]);
+  });
+  return params;
+}
+
+export {
+  viewportWidth,
+  viewportHeight,
+  wp,
+  hp,
+  statusBarHeight,
+  transfromFromData,
+};

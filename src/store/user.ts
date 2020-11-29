@@ -1,12 +1,18 @@
+import {Dispatch} from 'redux';
+
 export const SET_USER_INFO = 'SET_USER_INFO';
 export const CLEAN_USER_INFO = 'CLEAN_USER_INFO';
 export const SET_USER_LOGIN = 'SET_USER_LOGIN';
 export const SET_USER_LOGOUT = 'SET_USER_LOGOUT';
+export const SET_TOKEN = 'SET_TOKEN';
+export const CLENA_TOKEN = 'CLENA_TOKEN';
 
 export type SET_USER_INFO = typeof SET_USER_INFO;
 export type CLEAN_USER_INFO = typeof CLEAN_USER_INFO;
 export type SET_USER_LOGIN = typeof SET_USER_LOGIN;
 export type SET_USER_LOGOUT = typeof SET_USER_LOGOUT;
+export type SET_TOKEN = typeof SET_TOKEN;
+export type CLENA_TOKEN = typeof CLENA_TOKEN;
 
 export interface ISetUserInfoAction {
   type: SET_USER_INFO;
@@ -25,6 +31,11 @@ export interface ISetUserLogoutAction {
   type: SET_USER_LOGOUT;
 }
 
+export interface ISetTokenAction {
+  type: SET_TOKEN;
+  token: string;
+}
+
 // 设置用户信息
 export const setUserInfo = (playload: userInfo): ISetUserInfoAction => ({
   type: SET_USER_INFO,
@@ -36,6 +47,12 @@ export const cleanUserInfo = (): ICleanUserInfoAction => ({
   type: CLEAN_USER_INFO,
 });
 
+// 设置token
+export const setToken = (token: string): ISetTokenAction => ({
+  type: SET_TOKEN,
+  token,
+});
+
 // 登录状态
 export const setLogin = (): ISetUserLoginAction => ({
   type: SET_USER_LOGIN,
@@ -45,6 +62,14 @@ export const setLogin = (): ISetUserLoginAction => ({
 export const setLogout = (): ISetUserLogoutAction => ({
   type: SET_USER_LOGOUT,
 });
+
+// 登录
+export const login = (dispatch: Dispatch) => (payload: IUserState) => {
+  const {token, userInfo} = payload;
+  dispatch(setLogin());
+  dispatch(setUserInfo(userInfo));
+  dispatch(setToken(token));
+};
 
 export interface userInfo {
   account: string;
@@ -66,7 +91,8 @@ export interface userInfo {
   total_listen_time: number;
 }
 export interface IUserState {
-  isLoging: boolean;
+  isLogin: boolean;
+  token: string;
   userInfo: userInfo;
 }
 
@@ -91,7 +117,8 @@ const defaultUserInfo: userInfo = {
 };
 
 export const initState: IUserState = {
-  isLoging: false,
+  isLogin: false,
+  token: '',
   userInfo: defaultUserInfo,
 };
 
@@ -99,10 +126,10 @@ export type UserAction =
   | ISetUserInfoAction
   | ICleanUserInfoAction
   | ISetUserLoginAction
-  | ISetUserLogoutAction;
+  | ISetUserLogoutAction
+  | ISetTokenAction;
 
 export default (state = initState, action: UserAction): IUserState => {
-  console.log(action);
   switch (action.type) {
     case SET_USER_INFO:
       state.userInfo = action.playload;
@@ -111,10 +138,13 @@ export default (state = initState, action: UserAction): IUserState => {
       state.userInfo = {...defaultUserInfo};
       break;
     case SET_USER_LOGIN:
-      state.isLoging = true;
+      state.isLogin = true;
       break;
     case SET_USER_LOGOUT:
-      state.isLoging = false;
+      state.isLogin = false;
+      break;
+    case SET_TOKEN:
+      state.token = action.token;
       break;
     default:
       return state;

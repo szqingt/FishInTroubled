@@ -1,8 +1,9 @@
-export const SET_CAROUSEL_DATA = 'SET_CAROUSEL_DATA';
+import home, {Album} from '@pages/Home/store/reducer';
+
 export interface IHomeState {
   carouselList: [];
+  albumList: Album[];
 }
-import home from '@pages/Home/store/reducer';
 export default {
   home,
 };

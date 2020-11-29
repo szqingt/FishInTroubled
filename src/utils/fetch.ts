@@ -2,6 +2,7 @@ import axios, {AxiosResponse} from 'axios';
 import {BASE_URL} from '@config/consts';
 import store from '@store/index';
 import {showLoading, hideLoading} from '@store/loading';
+import {transfromFromData} from './index';
 
 const instance = axios.create({
   baseURL: BASE_URL,
@@ -19,10 +20,26 @@ export interface DefaultResult<T> {
 
 instance.interceptors.request.use(
   function (config) {
-    console.log('req config', config);
     if (!config.withoutMask) {
       store.dispatch(showLoading());
     }
+    const {user} = store.getState();
+    if (user.isLogin) {
+      config.headers = {
+        ...config.headers,
+        'x-basis-app-token': user.token,
+      };
+    }
+    if (config.isFormData) {
+      if (config.data) {
+        config.data = transfromFromData(config.data);
+      }
+      config.headers = {
+        ...config.headers,
+        'Content-Type': 'application/x-www-form-urlencoded',
+      };
+    }
+    console.log('req config', config);
     return config;
   },
   function (error) {
@@ -33,7 +50,7 @@ instance.interceptors.request.use(
 instance.interceptors.response.use(
   // @ts-ignore
   function (response: AxiosResponse<DefaultResult<any>>) {
-    console.log('res', response);
+    // console.log('res', response);
     const {config, data} = response;
     if (!config.withoutMask) {
       store.dispatch(hideLoading());
