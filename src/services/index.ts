@@ -34,7 +34,7 @@ function login(params: LoginParams) {
   });
 }
 
-function getInfo() {
+function getUserInfo() {
   return fetch({
     url: GET_USER_INFO,
     method: 'POST',
@@ -42,4 +42,4 @@ function getInfo() {
   });
 }
 
-export {search, login, getInfo};
+export {search, login, getUserInfo};

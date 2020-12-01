@@ -2,6 +2,7 @@ import React, {useEffect, useState} from 'react';
 import {
   FlatList,
   ListRenderItemInfo,
+  RefreshControl,
   StyleSheet,
   Text,
   View,
@@ -11,26 +12,49 @@ import {useDispatch, useSelector} from 'react-redux';
 import AlbumItem from './AlbumList';
 import Empty from '@components/Empty';
 import {Album} from './store/reducer';
+import {SearchBar} from '@ant-design/react-native';
+import {statusBarHeight} from '@utils/index';
+import {source} from '@services/index';
+
+const Header: React.FC<{onSubmit: (val: string) => void}> = ({onSubmit}) => {
+  const [search, setSearch] = useState('');
+  return (
+    <View>
+      <SearchBar
+        value={search}
+        placeholder="搜索"
+        onSubmit={(value) => onSubmit(value)}
+        onChange={(value) => setSearch(value)}
+      />
+    </View>
+  );
+};
 
 const Home: React.FC = () => {
   const {albumList} = useSelector((store) => store.home);
   const [isLoading, setLoading] = useState(false);
   const dispatch = useDispatch();
-  console.log('render Home');
   const [queryParams, setQueryParams] = useState<IQueryParams>({
     aclassify_id: 3,
     page: 1,
     keyword: '',
     loadMore: false,
   });
+
   useEffect(() => {
+    let isUnmounted = false;
     if (isLoading || (albumList.length >= 100 && queryParams.loadMore)) {
       return;
     }
     setLoading(true);
     queryAlbumList(queryParams)(dispatch).then(() => {
-      setLoading(false);
+      if (!isUnmounted) {
+        setLoading(false);
+      }
     });
+    return () => {
+      isUnmounted = true;
+    };
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [queryParams]);
 
@@ -49,6 +73,15 @@ const Home: React.FC = () => {
       ...queryParams,
       page,
       loadMore: true,
+    });
+  };
+
+  const search = (keyword: string) => {
+    setQueryParams({
+      ...queryParams,
+      keyword,
+      page: 1,
+      loadMore: false,
     });
   };
 
@@ -74,26 +107,35 @@ const Home: React.FC = () => {
   };
 
   return (
-    <FlatList
-      style={styles.flatList}
-      data={albumList}
-      renderItem={WrapAlbumItem}
-      refreshing={isLoading}
-      onRefresh={onRefresh}
-      onEndReached={onEndReached}
-      ListFooterComponent={renderFooter}
-      onEndReachedThreshold={0.1}
-      ListEmptyComponent={Empty}
-    />
+    <View style={styles.container}>
+      <Header onSubmit={search} />
+      <FlatList
+        data={albumList}
+        renderItem={WrapAlbumItem}
+        refreshing={isLoading}
+        onEndReached={onEndReached}
+        ListFooterComponent={renderFooter}
+        refreshControl={
+          <RefreshControl
+            refreshing={isLoading}
+            onRefresh={onRefresh}
+            colors={['#f86442']}
+          />
+        }
+        onEndReachedThreshold={0.1}
+        ListEmptyComponent={Empty}
+      />
+    </View>
   );
 };
 
 const styles = StyleSheet.create({
-  flatList: {
+  container: {
     flex: 1,
+    marginTop: statusBarHeight,
   },
   endContainer: {
-    margin: 10,
+    margin: 5,
     alignItems: 'center',
   },
   endText: {

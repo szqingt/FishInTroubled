@@ -1,4 +1,5 @@
 import {Dispatch} from 'redux';
+import {getUserInfo, login as loginService, LoginParams} from '@services/index';
 
 export const SET_USER_INFO = 'SET_USER_INFO';
 export const CLEAN_USER_INFO = 'CLEAN_USER_INFO';
@@ -64,11 +65,29 @@ export const setLogout = (): ISetUserLogoutAction => ({
 });
 
 // 登录
-export const login = (dispatch: Dispatch) => (payload: IUserState) => {
-  const {token, userInfo} = payload;
+export const login = (params: LoginParams) => async (dispatch: Dispatch) => {
+  const data = await loginService(params);
+  const user: IUserState = {
+    isLogin: true,
+    token: data.token,
+    userInfo: data.staff,
+  };
+  const {token, userInfo} = user;
   dispatch(setLogin());
   dispatch(setUserInfo(userInfo));
   dispatch(setToken(token));
+};
+
+// 更新userInfo
+export const refreshUserInfo = async (dispatch: Dispatch) => {
+  getUserInfo()
+    .then((data) => {
+      const {staff} = data;
+      dispatch(setUserInfo(staff));
+    })
+    .catch(() => {
+      dispatch(setLogout());
+    });
 };
 
 export interface userInfo {
@@ -142,6 +161,8 @@ export default (state = initState, action: UserAction): IUserState => {
       break;
     case SET_USER_LOGOUT:
       state.isLogin = false;
+      state.userInfo = defaultUserInfo;
+      state.token = '';
       break;
     case SET_TOKEN:
       state.token = action.token;

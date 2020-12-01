@@ -50,7 +50,7 @@ instance.interceptors.request.use(
 instance.interceptors.response.use(
   // @ts-ignore
   function (response: AxiosResponse<DefaultResult<any>>) {
-    // console.log('res', response);
+    console.log('res', response);
     const {config, data} = response;
     if (!config.withoutMask) {
       store.dispatch(hideLoading());
@@ -63,7 +63,7 @@ instance.interceptors.response.use(
   },
   function (error) {
     const {config} = error;
-    if (!config.withoutMask) {
+    if (config && !config.withoutMask) {
       store.dispatch(hideLoading());
     }
     return Promise.reject(error);

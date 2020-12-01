@@ -1,7 +1,6 @@
 import {InputItem, List, Toast} from '@ant-design/react-native';
 import {CAPTACH} from '@config/api';
 import {BASE_URL} from '@config/consts';
-import {login} from '@services/index';
 import React, {useState} from 'react';
 import {
   StyleSheet,
@@ -14,7 +13,7 @@ import {
 } from 'react-native';
 import ButtonStyle from '@ant-design/react-native/lib/button/style';
 import {useDispatch} from 'react-redux';
-import {IUserState, login as storeLogin} from '@store/user';
+import {login} from '@store/user';
 /**
  * 登录page
  */
@@ -31,19 +30,13 @@ const Login: React.FC = () => {
   const handleSubmit = async () => {
     Keyboard.dismiss();
     try {
-      const data = await login({
+      await login({
         account,
         password,
         v_code: vCode,
         isWeb: 1,
         version: 1,
-      });
-      const user: IUserState = {
-        isLogin: true,
-        token: data.token,
-        userInfo: data.staff,
-      };
-      storeLogin(dispatch)(user);
+      })(dispatch);
     } catch (error) {
       setUri(genVcodeUrl());
       const {data} = error;

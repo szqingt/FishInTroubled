@@ -23,7 +23,7 @@ type BottomTabsRouteProp = RouteProp<RootStackParmList, 'MainStackParmList'>;
 const {Navigator, Screen} = createBottomTabNavigator<BottomTabParmList>();
 
 const getTitleName = (route: BottomTabsRouteProp): string => {
-  const routeName = getFocusedRouteNameFromRoute(route) || 'HomeTabs';
+  const routeName = getFocusedRouteNameFromRoute(route) || 'Home';
   switch (routeName) {
     case 'Home':
       return '首页';
@@ -43,7 +43,15 @@ const BottomTabs: React.FC = () => {
   const route = useRoute<BottomTabsRouteProp>();
 
   React.useLayoutEffect(() => {
-    navigation.setOptions({headerTitle: getTitleName(route)});
+    const routeName = getFocusedRouteNameFromRoute(route) || 'Home';
+    if (routeName === 'Home') {
+      navigation.setOptions({headerTitle: '', headerTransparent: true});
+    } else {
+      navigation.setOptions({
+        headerTitle: getTitleName(route),
+        headerTransparent: false,
+      });
+    }
   }, [navigation, route]);
 
   return (

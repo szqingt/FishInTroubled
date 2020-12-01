@@ -1,28 +1,25 @@
 import {StatusBar} from 'react-native';
-import React, { useEffect } from 'react';
+import React, {useEffect} from 'react';
 import StackNavigator from './navigator';
-import {Provider as ReduxProvider} from 'react-redux';
-import store from '@store/index';
 import Loading from '@components/Loading';
-import {Provider as AntDProvider} from '@ant-design/react-native';
+import {refreshUserInfo} from '@store/user';
+import {useDispatch} from 'react-redux';
 
 export default () => {
-
+  const dispatch = useDispatch();
   useEffect(() => {
-    // todo
+    refreshUserInfo(dispatch);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
-
   return (
-    <AntDProvider>
-      <ReduxProvider store={store}>
-        <StackNavigator />
-        <StatusBar
-          backgroundColor="transparent"
-          barStyle="dark-content"
-          translucent
-        />
-        <Loading />
-      </ReduxProvider>
-    </AntDProvider>
-  )
+    <>
+      <StackNavigator />
+      <StatusBar
+        backgroundColor="transparent"
+        barStyle="dark-content"
+        translucent
+      />
+      <Loading />
+    </>
+  );
 };

@@ -19,16 +19,20 @@ export interface IQueryParams extends SearchParams {
 
 export const queryAlbumList = (params: IQueryParams) => {
   return async (dispatch: Dispatch) => {
-    const data: any = await search(params);
-    const {home} = store.getState();
-    const playload = data?.list?.albumList || [];
-    if (params.loadMore) {
-      dispatch({
-        type: SET_ALBUM_LIST,
-        playload: [...playload, ...home.albumList],
-      });
-    } else {
-      dispatch({type: SET_ALBUM_LIST, playload});
+    try {
+      const data: any = await search(params);
+      const {home} = store.getState();
+      const playload = data?.list?.albumList || [];
+      if (params.loadMore) {
+        dispatch({
+          type: SET_ALBUM_LIST,
+          playload: [...playload, ...home.albumList],
+        });
+      } else {
+        dispatch({type: SET_ALBUM_LIST, playload});
+      }
+    } catch (e) {
+      console.log(e);
     }
   };
 };

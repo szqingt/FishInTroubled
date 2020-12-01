@@ -2,6 +2,7 @@ import React, {useEffect, useRef} from 'react';
 import {
   NavigationContainer,
   NavigationContainerRef,
+  StackActions,
 } from '@react-navigation/native';
 import {
   createStackNavigator,
@@ -9,8 +10,8 @@ import {
 } from '@react-navigation/stack';
 import BottomTabs from './BottomTabs';
 import ModalStack, {ModalStackParmList} from './ModalStack';
-import {StatusBar} from 'react-native';
 import {useSelector} from 'react-redux';
+import {statusBarHeight} from '@utils/index';
 
 export type RootStackParmList = {
   MainStackParmList: MainStackParmList;
@@ -35,9 +36,13 @@ const StackNavigator: React.FC = () => {
   useEffect(() => {
     if (navigationRef.current) {
       if (!isLogin) {
-        navigationRef.current.navigate('ModalStackParmList', {screen: 'Login'});
+        navigationRef.current.dispatch(
+          StackActions.replace('ModalStackParmList', {screen: 'Login'}),
+        );
       } else {
-        navigationRef.current.navigate('MainStackParmList', {screen: 'Home'});
+        navigationRef.current.dispatch(
+          StackActions.replace('MainStackParmList', {screen: 'Home'}),
+        );
       }
     }
   }, [isLogin, navigationRef]);
@@ -47,18 +52,14 @@ const StackNavigator: React.FC = () => {
       <Navigator
         headerMode="float"
         screenOptions={{
+          headerStatusBarHeight: statusBarHeight,
           headerTitleAlign: 'center',
-          headerStatusBarHeight: StatusBar.currentHeight,
         }}>
+        <Screen name="MainStackParmList" component={BottomTabs} />
         <Screen
           name="ModalStackParmList"
+          options={{headerShown: false}}
           component={ModalStack}
-          options={{headerShown: false}}
-        />
-        <Screen
-          name="MainStackParmList"
-          component={BottomTabs}
-          options={{headerShown: false}}
         />
       </Navigator>
     </NavigationContainer>

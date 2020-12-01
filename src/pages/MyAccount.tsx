@@ -1,10 +1,14 @@
 import React from 'react';
-import {View, Text} from 'react-native';
+import {List} from '@ant-design/react-native';
+
+const Item = List.Item;
 
 const MyAccount: React.FC = () => (
-  <View>
-    <Text>MyAccount</Text>
-  </View>
+  <List renderHeader={'basic'}>
+    <Item data-seed="logId">
+      标题文字点击无反馈，文字超长则隐藏，文字超长则隐藏
+    </Item>
+  </List>
 );
 
 export default MyAccount;
