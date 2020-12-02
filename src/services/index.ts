@@ -1,4 +1,4 @@
-import {GET_USER_INFO, LOGIN, SEARCH} from '@config/api';
+import {GET_BACK_PASSWORD, GET_USER_INFO, LOGIN, SEARCH} from '@config/api';
 import fetch from '@utils/fetch';
 
 export interface SearchParams {
@@ -42,4 +42,13 @@ function getUserInfo() {
   });
 }
 
-export {search, login, getUserInfo};
+function findPassword(data: {account: string}) {
+  return fetch({
+    url: GET_BACK_PASSWORD,
+    method: 'POST',
+    isFormData: true,
+    data,
+  });
+}
+
+export {search, login, getUserInfo, findPassword};

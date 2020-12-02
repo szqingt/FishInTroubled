@@ -50,10 +50,13 @@ const StackNavigator: React.FC = () => {
   return (
     <NavigationContainer ref={navigationRef}>
       <Navigator
-        headerMode="float"
+        headerMode="screen"
         screenOptions={{
           headerStatusBarHeight: statusBarHeight,
           headerTitleAlign: 'center',
+          headerStyle: {
+            height: 60,
+          },
         }}>
         <Screen name="MainStackParmList" component={BottomTabs} />
         <Screen

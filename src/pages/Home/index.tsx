@@ -14,7 +14,6 @@ import Empty from '@components/Empty';
 import {Album} from './store/reducer';
 import {SearchBar} from '@ant-design/react-native';
 import {statusBarHeight} from '@utils/index';
-import {source} from '@services/index';
 
 const Header: React.FC<{onSubmit: (val: string) => void}> = ({onSubmit}) => {
   const [search, setSearch] = useState('');
@@ -54,6 +53,7 @@ const Home: React.FC = () => {
     });
     return () => {
       isUnmounted = true;
+      setLoading(false);
     };
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [queryParams]);
