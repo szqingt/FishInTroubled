@@ -1,5 +1,5 @@
-import React from 'react';
-import {List, Modal, Toast} from '@ant-design/react-native';
+import React, { useState } from 'react';
+import {List, Modal, NoticeBar, Toast} from '@ant-design/react-native';
 import {useSelector} from 'react-redux';
 import {Text, View} from 'react-native';
 import Icon from '@assets/iconfont';
@@ -18,10 +18,11 @@ const coin = (value: number | null | string) => (
 
 const MyAccount: React.FC = () => {
   const {userInfo} = useSelector((store) => store.user);
+  const [showNotice, setNotice] = useState(false);
 
   const confirm = async (account: string) => {
     await fpService({account});
-    Toast.success('请到邮箱里点击重置密码链接!!!', 10);
+    setNotice(true);
   };
 
   const findPassword = () => {
@@ -36,13 +37,18 @@ const MyAccount: React.FC = () => {
   };
   return (
     <>
+      {showNotice ? (
+        <NoticeBar mode="closable" icon={undefined}>
+          请到邮箱里点击重置密码链接!!!
+        </NoticeBar>
+      ) : null}
       <List>
         <Item extra={userInfo.nickname}>昵称</Item>
         <Item extra={userInfo.staff_name}>UID号</Item>
         <Item extra={userInfo.email}>邮箱</Item>
         <Item extra={userInfo.anchor_name}>标牌</Item>
         <Item extra={userInfo.fans_lv}>等级</Item>
-        <Item extra={userInfo.countryName}>所在地</Item>
+        <Item extra={userInfo.countryName}>所1在地</Item>
         <Item extra={coin(userInfo.gold)}>现有鱼币</Item>
         <Item extra={coin(userInfo.total_gold)}>曾经鱼币</Item>
         <Item onPress={findPassword} arrow="horizontal">
