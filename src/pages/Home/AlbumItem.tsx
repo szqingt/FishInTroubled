@@ -9,6 +9,12 @@ type IProps = {
   onPress: (item: Album) => void;
 };
 
+const TextTag = (value: string, darkBg: boolean = false) => (
+  <View style={[styles.textTag, darkBg ? {backgroundColor: '#c3c3c3'} : null]}>
+    <Text>{value}</Text>
+  </View>
+);
+
 const AlbumItem: React.FC<IProps> = ({item, onPress}) => {
   const url = item.title_file_url || LOGO_URL;
 
@@ -24,9 +30,18 @@ const AlbumItem: React.FC<IProps> = ({item, onPress}) => {
             <Text style={styles.titleText} numberOfLines={2}>
               {item.album_title}
             </Text>
-            <Text style={styles.remarkText} numberOfLines={2}>
+            <Text style={styles.remarkText} numberOfLines={1}>
               更新时间:{item.update_time}
             </Text>
+          </View>
+
+          <View style={styles.bottomView}>
+            {item.is_new ? TextTag('更新') : null}
+            {item.is_free ? TextTag('付费') : null}
+            {item.scale ? null : TextTag('海外', true)}
+            {item.serialize_status
+              ? TextTag('完结', true)
+              : TextTag('连载', true)}
           </View>
 
           <View style={styles.bottomView}>
@@ -77,10 +92,19 @@ const styles = StyleSheet.create({
   },
   titleText: {
     fontSize: 16,
+    fontWeight: '700',
     marginBottom: 10,
   },
   remarkText: {
     padding: 5,
+  },
+  textTag: {
+    backgroundColor: '#d52424',
+    paddingLeft: 5,
+    paddingRight: 5,
+    color: '#2a0808',
+    borderRadius: 2,
+    marginRight: 5,
   },
   bottomView: {
     flexDirection: 'row',

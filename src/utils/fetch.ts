@@ -39,7 +39,6 @@ instance.interceptors.request.use(
         'Content-Type': 'application/x-www-form-urlencoded',
       };
     }
-    console.log('req config', config);
     return config;
   },
   function (error) {
@@ -50,7 +49,6 @@ instance.interceptors.request.use(
 instance.interceptors.response.use(
   // @ts-ignore
   function (response: AxiosResponse<DefaultResult<any>>) {
-    console.log('res', response);
     const {config, data} = response;
     if (!config.withoutMask) {
       store.dispatch(hideLoading());

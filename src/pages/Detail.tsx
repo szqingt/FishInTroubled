@@ -1,10 +1,10 @@
 import React from 'react';
 import {View, Text} from 'react-native';
 import {useRoute, RouteProp} from '@react-navigation/native';
-import {RootStackParmList} from 'navigator';
+import {MainStackParmList} from 'navigator/MainStack';
 
 const Detail: React.FC = () => {
-  const route = useRoute<RouteProp<RootStackParmList, 'Detail'>>();
+  const route = useRoute<RouteProp<MainStackParmList, 'Detail'>>();
 
   return (
     <View>

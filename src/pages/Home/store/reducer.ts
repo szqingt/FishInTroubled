@@ -10,6 +10,9 @@ export interface Album {
   play_num: number; // 播放数量
   update_time: string; // 更新时间
   replay_num: number; // 评论
+  has_article: number; // 文章
+  serialize_status: number; // 是否连载
+  scale: number; // 0 海外
 }
 
 export const initState: IHomeState = {

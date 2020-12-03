@@ -1,3 +1,6 @@
+import {NavigationContainerRef} from '@react-navigation/native';
+import {RootStackParmList} from 'navigator';
+import React from 'react';
 import {Dimensions, Platform, StatusBar} from 'react-native';
 const {width: viewportWidth, height: viewportHeight} = Dimensions.get('window');
 
@@ -42,6 +45,20 @@ function transfromFromData(data: any): FormData {
   return params;
 }
 
+const navigationRef = React.createRef<NavigationContainerRef>();
+
+function navigate(name: keyof RootStackParmList, params?: any) {
+  if (navigationRef.current) {
+    navigationRef.current.navigate(name, params);
+  }
+}
+
+function navigateDispatch(params?: any) {
+  if (navigationRef.current) {
+    navigationRef.current.dispatch(params);
+  }
+}
+
 export {
   viewportWidth,
   viewportHeight,
@@ -49,4 +66,7 @@ export {
   hp,
   statusBarHeight,
   transfromFromData,
+  navigationRef,
+  navigate,
+  navigateDispatch,
 };

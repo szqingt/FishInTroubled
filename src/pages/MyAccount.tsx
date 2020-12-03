@@ -1,5 +1,5 @@
-import React, { useState } from 'react';
-import {List, Modal, NoticeBar, Toast} from '@ant-design/react-native';
+import React, {useState} from 'react';
+import {List, Modal, NoticeBar} from '@ant-design/react-native';
 import {useSelector} from 'react-redux';
 import {Text, View} from 'react-native';
 import Icon from '@assets/iconfont';

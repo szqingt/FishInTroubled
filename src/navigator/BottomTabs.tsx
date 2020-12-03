@@ -9,10 +9,11 @@ import {
   useRoute,
   getFocusedRouteNameFromRoute,
 } from '@react-navigation/native';
-import {MainStackParmList, RootStackParmList} from 'navigator';
+import {RootStackParmList} from 'navigator';
 import {StackNavigationProp} from '@react-navigation/stack';
 import HomeTabs from './HomeTabs';
 import Home from '@pages/Home';
+import {MainStackParmList} from './MainStack';
 type BottomTabParmList = {
   Home: undefined;
   Listen: undefined;

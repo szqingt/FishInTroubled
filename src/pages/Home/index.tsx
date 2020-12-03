@@ -9,11 +9,11 @@ import {
 } from 'react-native';
 import {IQueryParams, queryAlbumList} from './store/action';
 import {useDispatch, useSelector} from 'react-redux';
-import AlbumItem from './AlbumList';
+import AlbumItem from './AlbumItem';
 import Empty from '@components/Empty';
 import {Album} from './store/reducer';
 import {SearchBar} from '@ant-design/react-native';
-import {statusBarHeight} from '@utils/index';
+import {navigate, statusBarHeight} from '@utils/index';
 
 const Header: React.FC<{onSubmit: (val: string) => void}> = ({onSubmit}) => {
   const [search, setSearch] = useState('');
@@ -34,7 +34,7 @@ const Home: React.FC = () => {
   const [isLoading, setLoading] = useState(false);
   const dispatch = useDispatch();
   const [queryParams, setQueryParams] = useState<IQueryParams>({
-    aclassify_id: 3,
+    aclassify_id: 2,
     page: 1,
     keyword: '',
     loadMore: false,
@@ -87,9 +87,12 @@ const Home: React.FC = () => {
 
   // const navigation = useNavigation();
   const onPress = (item: Album) => {
-    // navigation.navigate('Album', {item});
-    // todo go details
-    console.log(item);
+    navigate('MainStackParmList', {
+      screen: 'Detail',
+      params: {
+        id: item.album_id,
+      },
+    });
   };
 
   const WrapAlbumItem = ({item}: ListRenderItemInfo<Album>) => {

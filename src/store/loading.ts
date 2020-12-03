@@ -35,7 +35,6 @@ export const initState: ILoadingState = {
 export type SetLoadingAction = IShowLoadingAction | IHideLoadingAction;
 
 export default (state = initState, action: SetLoadingAction): ILoadingState => {
-  console.log(action);
   switch (action.type) {
     case SHOW_LOADING:
       state.count += 1;
