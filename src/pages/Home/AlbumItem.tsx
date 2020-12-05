@@ -1,9 +1,9 @@
-import Touchable from '@components/Tachable';
+import Touchable from '@components/Touchable';
 import React from 'react';
 import Icon from '@assets/iconfont';
 import {Image, StyleSheet, Text, View} from 'react-native';
 import {Album} from './store/reducer';
-import {LOGO_URL} from '@config/consts';
+import LOGO from '@assets/images/logo.png';
 type IProps = {
   item: Album;
   onPress: (item: Album) => void;
@@ -11,23 +11,24 @@ type IProps = {
 
 const TextTag = (value: string, darkBg: boolean = false) => (
   <View style={[styles.textTag, darkBg ? {backgroundColor: '#c3c3c3'} : null]}>
-    <Text>{value}</Text>
+    <Text style={{fontSize: 12}}>{value}</Text>
   </View>
 );
 
 const AlbumItem: React.FC<IProps> = ({item, onPress}) => {
-  const url = item.title_file_url || LOGO_URL;
-
   const press = () => {
     onPress(item);
   };
   return (
     <Touchable onPress={press} style={styles.container}>
       <View style={styles.item}>
-        <Image source={{uri: url}} style={styles.image} />
+        <Image
+          source={item.title_file_url ? {uri: item.title_file_url} : LOGO}
+          style={styles.image}
+        />
         <View style={styles.rightView}>
-          <View style={{flex: 1}}>
-            <Text style={styles.titleText} numberOfLines={2}>
+          <View>
+            <Text style={styles.titleText} numberOfLines={1}>
               {item.album_title}
             </Text>
             <Text style={styles.remarkText} numberOfLines={1}>
@@ -93,10 +94,10 @@ const styles = StyleSheet.create({
   titleText: {
     fontSize: 16,
     fontWeight: '700',
-    marginBottom: 10,
+    marginBottom: 5,
   },
   remarkText: {
-    padding: 5,
+    marginBottom: 10,
   },
   textTag: {
     backgroundColor: '#d52424',
@@ -109,6 +110,7 @@ const styles = StyleSheet.create({
   bottomView: {
     flexDirection: 'row',
     alignContent: 'flex-end',
+    marginBottom: 5,
   },
   playedView: {
     flexDirection: 'row',

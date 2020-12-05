@@ -1,5 +1,8 @@
 import React from 'react';
-import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
+import {
+  BottomTabBarButtonProps,
+  createBottomTabNavigator,
+} from '@react-navigation/bottom-tabs';
 import Listen from '@pages/Listen';
 import MyAccount from '@pages/MyAccount';
 import Icon from '@assets/iconfont';
@@ -14,6 +17,7 @@ import {StackNavigationProp} from '@react-navigation/stack';
 import HomeTabs from './HomeTabs';
 import Home from '@pages/Home';
 import {MainStackParmList} from './MainStack';
+import PlayButton from '@components/PlayButton';
 type BottomTabParmList = {
   Home: undefined;
   Listen: undefined;
@@ -72,10 +76,17 @@ const BottomTabs: React.FC = () => {
       />
       <Screen
         name="Listen"
-        component={Listen}
-        options={{
-          tabBarLabel: '听',
-        }}
+        component={PlayButton}
+        options={() => ({
+          tabBarButton: (props: BottomTabBarButtonProps) => {
+            delete props.onPress;
+            return (
+              <PlayButton
+                onPress={() => navigation.navigate('Detail', {id: '1'})}
+              />
+            );
+          },
+        })}
       />
       <Screen
         name="MyAccount"

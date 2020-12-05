@@ -13,24 +13,26 @@ export type MainStackParmList = {
 
 const {Navigator, Screen} = createStackNavigator<MainStackParmList>();
 
-const MainStack: React.FC = () => (
-  <Navigator
-    mode="modal"
-    screenOptions={{
-      headerStatusBarHeight: statusBarHeight,
-      headerTitleAlign: 'center',
-      headerStyle: {
-        height: 60,
-      },
-      ...TransitionPresets.ModalSlideFromBottomIOS,
-    }}>
-    <Screen name="BottomTabs" component={BottomTabs} />
-    <Screen
-      name="Detail"
-      component={Detail}
-      options={{headerShown: false, gestureEnabled: true}}
-    />
-  </Navigator>
-);
+const MainStack: React.FC = () => {
+  return (
+    <Navigator
+      mode="modal"
+      screenOptions={{
+        headerStatusBarHeight: statusBarHeight,
+        headerTitleAlign: 'center',
+        headerStyle: {
+          height: 60,
+        },
+        ...TransitionPresets.ModalSlideFromBottomIOS,
+      }}>
+      <Screen name="BottomTabs" component={BottomTabs} />
+      <Screen
+        name="Detail"
+        component={Detail}
+        options={{headerShown: false, gestureEnabled: true}}
+      />
+    </Navigator>
+  );
+};
 
 export default MainStack;

@@ -8,6 +8,7 @@ import ModalStack, {ModalStackParmList} from './ModalStack';
 import {useSelector} from 'react-redux';
 import {navigateDispatch, navigationRef} from '@utils/index';
 import MainStack, {MainStackParmList} from './MainStack';
+import PlayButtonView from '@pages/PlayButtonView';
 
 export type RootStackParmList = {
   MainStackParmList: MainStackParmList;
@@ -47,6 +48,7 @@ const StackNavigator: React.FC = () => {
           component={ModalStack}
         />
       </Navigator>
+      <PlayButtonView activeScreenName={'test'} />
     </NavigationContainer>
   );
 };
