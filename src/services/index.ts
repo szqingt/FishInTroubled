@@ -1,4 +1,11 @@
-import {GET_BACK_PASSWORD, GET_USER_INFO, LOGIN, SEARCH} from '@config/api';
+import {
+  BUY_ALBUM,
+  GET_ALBUM_INFO,
+  GET_BACK_PASSWORD,
+  GET_USER_INFO,
+  LOGIN,
+  SEARCH,
+} from '@config/api';
 import fetch from '@utils/fetch';
 
 export interface SearchParams {
@@ -51,4 +58,26 @@ function findPassword(data: {account: string}) {
   });
 }
 
-export {search, login, getUserInfo, findPassword};
+function getAlbumInfo(id: string) {
+  return fetch({
+    url: GET_ALBUM_INFO,
+    method: 'POST',
+    isFormData: true,
+    data: {
+      album_id: id,
+    },
+  });
+}
+
+function bugAlbum(id: string) {
+  return fetch({
+    url: BUY_ALBUM,
+    method: 'POST',
+    isFormData: true,
+    data: {
+      album_id: id,
+    },
+  });
+}
+
+export {search, login, getUserInfo, findPassword, getAlbumInfo, bugAlbum};

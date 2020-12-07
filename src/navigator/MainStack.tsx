@@ -1,14 +1,21 @@
 import React from 'react';
-import {createStackNavigator, TransitionPresets} from '@react-navigation/stack';
+import {
+  CardStyleInterpolators,
+  createStackNavigator,
+  HeaderStyleInterpolators,
+  TransitionPresets,
+} from '@react-navigation/stack';
 import Detail from '@pages/Detail';
 import BottomTabs from './BottomTabs';
 import {statusBarHeight} from '@utils/index';
+import Listen from '@pages/Listen';
 
 export type MainStackParmList = {
   BottomTabs: undefined;
   Detail: {
     id: string;
   };
+  Listen: undefined;
 };
 
 const {Navigator, Screen} = createStackNavigator<MainStackParmList>();
@@ -29,6 +36,17 @@ const MainStack: React.FC = () => {
       <Screen
         name="Detail"
         component={Detail}
+        options={{
+          headerTitle: '专辑详情',
+          gestureEnabled: true,
+          gestureDirection: 'horizontal',
+          headerStyleInterpolator: HeaderStyleInterpolators.forUIKit,
+          cardStyleInterpolator: CardStyleInterpolators.forHorizontalIOS,
+        }}
+      />
+      <Screen
+        name="Listen"
+        component={Listen}
         options={{headerShown: false, gestureEnabled: true}}
       />
     </Navigator>

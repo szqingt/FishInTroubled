@@ -15,14 +15,9 @@ interface IProps {
 
 const PlayButtonView: React.FC<IProps> = ({activeScreenName}) => {
   const onPress = () => {
-    navigate('MainStackParmList', {screen: 'Detail', params: {id: '2'}});
+    navigate('MainStackParmList', {screen: 'Listen'});
   };
-  if (
-    activeScreenName === 'Home' ||
-    activeScreenName === 'Listen' ||
-    activeScreenName === 'ProgramDetail' ||
-    activeScreenName === 'Account'
-  ) {
+  if (['Home', 'Listen', 'Account', 'Login'].includes(activeScreenName)) {
     return null;
   }
   return (

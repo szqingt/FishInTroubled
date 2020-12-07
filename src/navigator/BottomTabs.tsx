@@ -3,7 +3,6 @@ import {
   BottomTabBarButtonProps,
   createBottomTabNavigator,
 } from '@react-navigation/bottom-tabs';
-import Listen from '@pages/Listen';
 import MyAccount from '@pages/MyAccount';
 import Icon from '@assets/iconfont';
 import {
@@ -14,7 +13,6 @@ import {
 } from '@react-navigation/native';
 import {RootStackParmList} from 'navigator';
 import {StackNavigationProp} from '@react-navigation/stack';
-import HomeTabs from './HomeTabs';
 import Home from '@pages/Home';
 import {MainStackParmList} from './MainStack';
 import PlayButton from '@components/PlayButton';
@@ -80,11 +78,7 @@ const BottomTabs: React.FC = () => {
         options={() => ({
           tabBarButton: (props: BottomTabBarButtonProps) => {
             delete props.onPress;
-            return (
-              <PlayButton
-                onPress={() => navigation.navigate('Detail', {id: '1'})}
-              />
-            );
+            return <PlayButton onPress={() => navigation.navigate('Listen')} />;
           },
         })}
       />

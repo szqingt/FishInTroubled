@@ -1,12 +1,20 @@
-import React, {useEffect} from 'react';
-import {NavigationContainer, StackActions} from '@react-navigation/native';
+import React, {useEffect, useState} from 'react';
+import {
+  NavigationContainer,
+  NavigationState,
+  StackActions,
+} from '@react-navigation/native';
 import {
   createStackNavigator,
   StackNavigationProp,
 } from '@react-navigation/stack';
 import ModalStack, {ModalStackParmList} from './ModalStack';
 import {useSelector} from 'react-redux';
-import {navigateDispatch, navigationRef} from '@utils/index';
+import {
+  findRouteNameFromNavigatorState,
+  navigateDispatch,
+  navigationRef,
+} from '@utils/index';
 import MainStack, {MainStackParmList} from './MainStack';
 import PlayButtonView from '@pages/PlayButtonView';
 
@@ -21,6 +29,7 @@ const {Navigator, Screen} = createStackNavigator<RootStackParmList>();
 
 const StackNavigator: React.FC = () => {
   const {isLogin} = useSelector((store) => store.user);
+  const [activeScreenName, setName] = useState('');
 
   useEffect(() => {
     if (!isLogin) {
@@ -34,8 +43,12 @@ const StackNavigator: React.FC = () => {
     }
   }, [isLogin]);
 
+  const stateChange = (state: NavigationState | undefined) => {
+    setName(findRouteNameFromNavigatorState(state));
+  };
+
   return (
-    <NavigationContainer ref={navigationRef}>
+    <NavigationContainer ref={navigationRef} onStateChange={stateChange}>
       <Navigator headerMode="screen">
         <Screen
           name="MainStackParmList"
@@ -48,7 +61,7 @@ const StackNavigator: React.FC = () => {
           component={ModalStack}
         />
       </Navigator>
-      <PlayButtonView activeScreenName={'test'} />
+      <PlayButtonView activeScreenName={activeScreenName} />
     </NavigationContainer>
   );
 };

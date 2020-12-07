@@ -1,4 +1,7 @@
-import {NavigationContainerRef} from '@react-navigation/native';
+import {
+  NavigationContainerRef,
+  NavigationState,
+} from '@react-navigation/native';
 import {RootStackParmList} from 'navigator';
 import React from 'react';
 import {Dimensions, Platform, StatusBar} from 'react-native';
@@ -59,6 +62,34 @@ function navigateDispatch(params?: any) {
   }
 }
 
+// 获取当前screen 的name
+function findRouteNameFromNavigatorState(
+  state: NavigationState | undefined,
+): string {
+  if (!state) {
+    return '';
+  }
+  const {routes, index} = state;
+
+  let route = routes[index];
+  while (route.state) {
+    route = (route.state as NavigationState).routes[
+      (route.state as NavigationState).index
+    ];
+  }
+  return route.name;
+}
+
+function getRandomColor() {
+  const rgb = [];
+  for (let i = 0; i < 3; ++i) {
+    let color = Math.floor(Math.random() * 256).toString(16);
+    color = color.length === 1 ? '0' + color : color;
+    rgb.push(color);
+  }
+  return '#' + rgb.join('');
+}
+
 export {
   viewportWidth,
   viewportHeight,
@@ -69,4 +100,6 @@ export {
   navigationRef,
   navigate,
   navigateDispatch,
+  findRouteNameFromNavigatorState,
+  getRandomColor,
 };

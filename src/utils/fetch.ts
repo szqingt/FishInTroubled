@@ -39,6 +39,7 @@ instance.interceptors.request.use(
         'Content-Type': 'application/x-www-form-urlencoded',
       };
     }
+    console.log(config.url);
     return config;
   },
   function (error) {
