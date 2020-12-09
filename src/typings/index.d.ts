@@ -37,5 +37,5 @@ interface AlbumInfo {
     update_time: number;
   };
   albumTagList: {tag_name: string}[];
-  progrmaList: Progrma[];
+  programList: Progrma[];
 }

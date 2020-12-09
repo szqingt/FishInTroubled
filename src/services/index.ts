@@ -59,7 +59,7 @@ function findPassword(data: {account: string}) {
 }
 
 function getAlbumInfo(id: string) {
-  return fetch({
+  return fetch<AlbumInfo>({
     url: GET_ALBUM_INFO,
     method: 'POST',
     isFormData: true,

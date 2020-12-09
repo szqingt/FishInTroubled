@@ -78,7 +78,11 @@ const BottomTabs: React.FC = () => {
         options={() => ({
           tabBarButton: (props: BottomTabBarButtonProps) => {
             delete props.onPress;
-            return <PlayButton onPress={() => navigation.navigate('Listen')} />;
+            return (
+              <PlayButton
+                onPress={() => navigation.navigate('Listen', {id: null})}
+              />
+            );
           },
         })}
       />

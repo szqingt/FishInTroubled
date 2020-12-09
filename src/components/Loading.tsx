@@ -9,6 +9,7 @@ const styles = StyleSheet.create({
     width: viewportWidth,
     height: viewportHeight,
     backgroundColor: 'rgba(0,0,0,0.4)',
+    elevation: 0,
   },
 });
 

@@ -1,16 +1,55 @@
 import React, {useEffect, useState} from 'react';
-import {View, Text, StyleSheet, Image} from 'react-native';
-import {useRoute, RouteProp} from '@react-navigation/native';
+import {
+  View,
+  Text,
+  StyleSheet,
+  Image,
+  FlatList,
+  ListRenderItemInfo,
+} from 'react-native';
+import {useRoute, RouteProp, useNavigation} from '@react-navigation/native';
 import {MainStackParmList} from 'navigator/MainStack';
-import {Button, Flex, WingBlank} from '@ant-design/react-native';
-import {getAlbumInfo} from '@services/index';
+import {Button, Flex, Toast, WingBlank} from '@ant-design/react-native';
+import {bugAlbum, getAlbumInfo} from '@services/index';
 import LOGO from '@assets/images/logo.png';
 import {getRandomColor} from '@utils/index';
+import Empty from '@components/Empty';
+import { StackNavigationProp } from '@react-navigation/stack';
+
+const ProgramItem = ({
+  item,
+  onPress,
+}: {
+  item: Progrma;
+  onPress: (id: string) => void;
+}) => {
+  const press = () => {
+    onPress(item.program_id);
+  };
+  return (
+    <Flex style={styles.programItem}>
+      <Flex.Item>
+        <Text>{item.program_name}</Text>
+        <Text style={styles.rogramSubText}>
+          {item.file_size}M {'   ' + item.update_time}
+        </Text>
+      </Flex.Item>
+      <View>
+        <Button size="small" disabled={item.is_gain !== '1'} onPress={press}>
+          播放
+        </Button>
+      </View>
+    </Flex>
+  );
+};
 
 const Detail: React.FC = () => {
   const route = useRoute<RouteProp<MainStackParmList, 'Detail'>>();
   const id = route.params.id;
   const [albumInfo, setInfo] = useState<AlbumInfo>();
+  const navigation = useNavigation<
+    StackNavigationProp<MainStackParmList, 'Detail'>
+  >();
 
   useEffect(() => {
     getAlbumInfo(id).then((res) => {
@@ -22,8 +61,27 @@ const Detail: React.FC = () => {
     return null;
   }
 
-  const {albumInfo: albumDetil, progrmaList, albumTagList} = albumInfo;
+  const onPress = (programId: string) => {
+    navigation.navigate('Listen', {id: programId});
+  };
 
+  const WarpItem = ({item}: ListRenderItemInfo<Progrma>) => (
+    <ProgramItem item={item} onPress={onPress} />
+  );
+
+  const {albumInfo: albumDetil, programList, albumTagList} = albumInfo;
+
+  const gain = async () => {
+    try {
+      await bugAlbum(albumDetil.album_id);
+      const newAlbumInfo = await getAlbumInfo(id);
+      setInfo(newAlbumInfo);
+      Toast.success('购买成功！');
+    } catch (e) {
+      const {data} = e;
+      Toast.fail(data.message || '购买失败!');
+    }
+  };
   return (
     <View style={styles.detailContainer}>
       <WingBlank style={styles.albumContainer}>
@@ -50,17 +108,27 @@ const Detail: React.FC = () => {
             </Text>
           </View>
           <Flex.Item style={styles.opreationContainer}>
-            <Button size="small">按钮1</Button>
+            <Button
+              size="small"
+              onPress={gain}
+              disabled={albumDetil.is_gain === '1'}>
+              {albumDetil.is_gain === '1' ? '已购买' : '￥' + albumDetil.price}
+            </Button>
           </Flex.Item>
         </Flex>
-        <Flex justify="start" style={{marginBottom: 10}}>
-          {albumTagList.map((tag) => (
-            <Text style={{...styles.tag, backgroundColor: getRandomColor()}}>
-              {tag.tag_name}
-            </Text>
-          ))}
-        </Flex>
       </WingBlank>
+      <Flex justify="start" wrap="wrap" style={{marginBottom: 10}}>
+        {albumTagList.map((tag) => (
+          <Text style={{...styles.tag, backgroundColor: getRandomColor()}}>
+            {tag.tag_name}
+          </Text>
+        ))}
+      </Flex>
+      <FlatList
+        data={programList}
+        renderItem={WarpItem}
+        ListEmptyComponent={Empty}
+      />
     </View>
   );
 };
@@ -79,6 +147,7 @@ const styles = StyleSheet.create({
   coverImage: {
     width: 100,
     height: 100,
+    borderRadius: 5,
   },
   infoContainer: {
     flex: 3,
@@ -103,6 +172,17 @@ const styles = StyleSheet.create({
     paddingVertical: 3,
     borderRadius: 5,
     color: '#fff',
+    marginBottom: 3,
+  },
+  programItem: {
+    height: 50,
+    borderTopWidth: 0.5,
+    borderTopColor: '#acacac',
+    paddingHorizontal: 6,
+  },
+  rogramSubText: {
+    fontSize: 12,
+    color: '#acacac',
   },
 });
 

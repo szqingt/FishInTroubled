@@ -15,7 +15,9 @@ export type MainStackParmList = {
   Detail: {
     id: string;
   };
-  Listen: undefined;
+  Listen: {
+    id: string | null;
+  };
 };
 
 const {Navigator, Screen} = createStackNavigator<MainStackParmList>();
