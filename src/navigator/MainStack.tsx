@@ -8,7 +8,7 @@ import {
 import Detail from '@pages/Detail';
 import BottomTabs from './BottomTabs';
 import {statusBarHeight} from '@utils/index';
-import Listen from '@pages/Listen';
+import Listen from '@pages/Listen/Listen';
 
 export type MainStackParmList = {
   BottomTabs: undefined;
@@ -16,7 +16,7 @@ export type MainStackParmList = {
     id: string;
   };
   Listen: {
-    id: string | null;
+    id?: string;
   };
 };
 
@@ -49,7 +49,11 @@ const MainStack: React.FC = () => {
       <Screen
         name="Listen"
         component={Listen}
-        options={{headerShown: false, gestureEnabled: true}}
+        options={{
+          headerShown: false,
+          gestureEnabled: true,
+          gestureResponseDistance: {vertical: 400},
+        }}
       />
     </Navigator>
   );

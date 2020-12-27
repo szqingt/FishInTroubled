@@ -14,7 +14,9 @@ import {bugAlbum, getAlbumInfo} from '@services/index';
 import LOGO from '@assets/images/logo.png';
 import {getRandomColor} from '@utils/index';
 import Empty from '@components/Empty';
-import { StackNavigationProp } from '@react-navigation/stack';
+import {StackNavigationProp} from '@react-navigation/stack';
+import {useDispatch} from 'react-redux';
+import {SET_ALBUM_INFO} from '@store/playInfo';
 
 const ProgramItem = ({
   item,
@@ -47,6 +49,7 @@ const Detail: React.FC = () => {
   const route = useRoute<RouteProp<MainStackParmList, 'Detail'>>();
   const id = route.params.id;
   const [albumInfo, setInfo] = useState<AlbumInfo>();
+  const dispatch = useDispatch();
   const navigation = useNavigation<
     StackNavigationProp<MainStackParmList, 'Detail'>
   >();
@@ -63,6 +66,11 @@ const Detail: React.FC = () => {
 
   const onPress = (programId: string) => {
     navigation.navigate('Listen', {id: programId});
+    dispatch({
+      type: SET_ALBUM_INFO,
+      album: albumDetil,
+      programList,
+    });
   };
 
   const WarpItem = ({item}: ListRenderItemInfo<Progrma>) => (

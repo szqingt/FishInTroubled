@@ -48,7 +48,7 @@ const MyAccount: React.FC = () => {
         <Item extra={userInfo.email}>邮箱</Item>
         <Item extra={userInfo.anchor_name}>标牌</Item>
         <Item extra={userInfo.fans_lv}>等级</Item>
-        <Item extra={userInfo.countryName}>所1在地</Item>
+        <Item extra={userInfo.countryName}>所在地</Item>
         <Item extra={coin(userInfo.gold)}>现有鱼币</Item>
         <Item extra={coin(userInfo.total_gold)}>曾经鱼币</Item>
         <Item onPress={findPassword} arrow="horizontal">

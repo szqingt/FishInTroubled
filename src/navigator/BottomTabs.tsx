@@ -80,7 +80,8 @@ const BottomTabs: React.FC = () => {
             delete props.onPress;
             return (
               <PlayButton
-                onPress={() => navigation.navigate('Listen', {id: null})}
+                {...props}
+                onPress={() => navigation.navigate('Listen', {id: undefined})}
               />
             );
           },
