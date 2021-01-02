@@ -130,7 +130,7 @@ export const play = async (dispatch: Dispatch<PlayInfoAction>, id?: string) => {
     }
 
     // 恢复播放
-    if (playState === 'paused' && !id) {
+    if (playState === 'paused' && program?.program_id) {
       dispatch({
         type: SET_PLAYSTATE,
         playState: 'playing',
@@ -142,7 +142,7 @@ export const play = async (dispatch: Dispatch<PlayInfoAction>, id?: string) => {
     }
 
     if (
-      program?.program_id === data.program_id &&
+      (program?.program_id === data.program_id || !id) &&
       (playState === 'loading' || playState === 'playing')
     ) {
       return;

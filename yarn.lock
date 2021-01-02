@@ -5234,12 +5234,6 @@ react-is@^16.12.0, react-is@^16.13.0, react-is@^16.13.1, react-is@^16.7.0, react
   version "16.13.1"
   resolved "https://registry.npm.taobao.org/react-is/download/react-is-16.13.1.tgz?cache=0&sync_timestamp=1603367576715&other_urls=https%3A%2F%2Fregistry.npm.taobao.org%2Freact-is%2Fdownload%2Freact-is-16.13.1.tgz#789729a4dc36de2999dc156dd6c1d9c18cea56a4"
 
-react-native-circular-progress@^1.3.6:
-  version "1.3.6"
-  resolved "https://registry.npm.taobao.org/react-native-circular-progress/download/react-native-circular-progress-1.3.6.tgz#023f74785274ea1a4473ca9291e600e5d33ee892"
-  dependencies:
-    prop-types "^15.7.2"
-
 react-native-collapsible@^1.5.2:
   version "1.5.3"
   resolved "https://registry.npm.taobao.org/react-native-collapsible/download/react-native-collapsible-1.5.3.tgz?cache=0&sync_timestamp=1598446186429&other_urls=https%3A%2F%2Fregistry.npm.taobao.org%2Freact-native-collapsible%2Fdownload%2Freact-native-collapsible-1.5.3.tgz#d6bc7274ae8f40f7688cca23ededa263e6c81c63"

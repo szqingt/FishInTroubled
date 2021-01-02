@@ -1,8 +1,5 @@
 import React from 'react';
-import {
-  BottomTabBarButtonProps,
-  createBottomTabNavigator,
-} from '@react-navigation/bottom-tabs';
+import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
 import MyAccount from '@pages/MyAccount';
 import Icon from '@assets/iconfont';
 import {
@@ -76,11 +73,10 @@ const BottomTabs: React.FC = () => {
         name="Listen"
         component={PlayButton}
         options={() => ({
-          tabBarButton: (props: BottomTabBarButtonProps) => {
-            delete props.onPress;
+          tabBarButton: () => {
+            console.log('bootom tabs');
             return (
               <PlayButton
-                {...props}
                 onPress={() => navigation.navigate('Listen', {id: undefined})}
               />
             );

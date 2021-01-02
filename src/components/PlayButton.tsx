@@ -1,30 +1,38 @@
 import React, {useEffect, useState} from 'react';
 import {StyleSheet, Animated, Easing, View, Image} from 'react-native';
 import Touchable from './Touchable';
-import {AnimatedCircularProgress} from 'react-native-circular-progress';
 import Icon from '@assets/iconfont';
 import {useSelector} from 'react-redux';
 import LOGO from '@assets/images/logo.png';
+import TestCircle from './CircularProgress';
 
 interface IProps {
   onPress: () => void;
 }
 
-interface ProgressProps {
+interface IProgressProps {
   percent: number;
 }
 
-const ProgressBar: React.FC<ProgressProps> = ({percent, children}) => (
-  <AnimatedCircularProgress
-    size={40}
-    width={2}
-    rotation={0}
-    fill={percent}
-    tintColor="#f86442"
-    backgroundColor="#ededed">
-    {() => <>{children}</>}
-  </AnimatedCircularProgress>
-);
+class ProgressBar extends React.PureComponent<IProgressProps> {
+  constructor(props: IProgressProps) {
+    super(props);
+  }
+  render() {
+    const {children, percent} = this.props;
+    return (
+      <TestCircle
+        size={40}
+        width={2}
+        rotation={0}
+        fill={percent}
+        tintColor="#f86442"
+        backgroundColor="#ededed">
+        {() => <>{children}</>}
+      </TestCircle>
+    );
+  }
+}
 
 const PlayButton: React.FC<IProps> = ({onPress}) => {
   const [anim] = useState(new Animated.Value(0));
@@ -39,7 +47,7 @@ const PlayButton: React.FC<IProps> = ({onPress}) => {
       {iterations: -1},
     ),
   );
-  const {playState, percent, album} = useSelector((state) => state.palyInfo);
+  const {playState, album, percent} = useSelector((state) => state.palyInfo);
 
   const rotate = anim.interpolate({
     inputRange: [0, 1], //输入值
