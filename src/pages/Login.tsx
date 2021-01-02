@@ -1,4 +1,4 @@
-import {InputItem, List, Toast} from '@ant-design/react-native';
+import {Button, InputItem, List, Toast} from '@ant-design/react-native';
 import {CAPTACH} from '@config/api';
 import {BASE_URL} from '@config/consts';
 import React, {useState} from 'react';
@@ -9,7 +9,6 @@ import {
   Image,
   TouchableOpacity,
   Keyboard,
-  Button,
 } from 'react-native';
 import ButtonStyle from '@ant-design/react-native/lib/button/style';
 import {useDispatch} from 'react-redux';
@@ -82,10 +81,9 @@ const Login: React.FC = () => {
           验证码
         </InputItem>
       </List>
-      {/* <Button onPress={handleSubmit} style={styles.btn} styles={btnStyles}>
+      <Button onPress={handleSubmit} style={styles.btn} styles={btnStyles}>
         登录
-      </Button> */}
-      <Button onPress={handleSubmit} title="测试" />
+      </Button>
     </ScrollView>
   );
 };
