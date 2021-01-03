@@ -1,7 +1,7 @@
 # FishInTroubled
 浑水摸鱼APP build for ReactNative & Typescript  
 内容来源[渾水摸魚](https://imayu.com/) 
-> 水至清則無魚，人至察則無徒
+> 水至清則無魚，人至察則無徒  
 [![GitHub release](https://img.shields.io/github/v/release/szqingt/FishInTroubled?include_prereleases&style=flat-square)](https://github.com/szqingt/FishInTroubled/releases)
 
 # screenshot
