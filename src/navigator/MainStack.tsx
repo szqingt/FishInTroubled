@@ -1,14 +1,10 @@
 import React from 'react';
-import {
-  CardStyleInterpolators,
-  createStackNavigator,
-  HeaderStyleInterpolators,
-  TransitionPresets,
-} from '@react-navigation/stack';
+import {createStackNavigator, TransitionPresets} from '@react-navigation/stack';
 import Detail from '@pages/Detail';
 import BottomTabs from './BottomTabs';
 import {statusBarHeight} from '@utils/index';
 import Listen from '@pages/Listen/Listen';
+import {Platform, StyleSheet} from 'react-native';
 
 export type MainStackParmList = {
   BottomTabs: undefined;
@@ -30,7 +26,12 @@ const MainStack: React.FC = () => {
         headerStatusBarHeight: statusBarHeight,
         headerTitleAlign: 'center',
         headerStyle: {
-          height: 60,
+          ...Platform.select({
+            android: {
+              elevation: 0,
+              borderBottomWidth: StyleSheet.hairlineWidth,
+            },
+          }),
         },
         ...TransitionPresets.ModalSlideFromBottomIOS,
       }}>
@@ -42,12 +43,11 @@ const MainStack: React.FC = () => {
           headerTitle: '专辑详情',
           gestureEnabled: true,
           gestureDirection: 'horizontal',
-          headerStyleInterpolator: HeaderStyleInterpolators.forUIKit,
-          cardStyleInterpolator: CardStyleInterpolators.forHorizontalIOS,
         }}
       />
       <Screen
         name="Listen"
+        initialParams={{id: undefined}}
         component={Listen}
         options={{
           headerShown: false,

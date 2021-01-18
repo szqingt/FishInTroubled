@@ -90,6 +90,7 @@ const Login: React.FC = () => {
 
 const styles = StyleSheet.create({
   container: {
+    marginTop: 40,
     paddingBottom: 200,
   },
   logo: {

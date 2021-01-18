@@ -13,9 +13,11 @@ import {StackNavigationProp} from '@react-navigation/stack';
 import Home from '@pages/Home';
 import {MainStackParmList} from './MainStack';
 import PlayButton from '@components/PlayButton';
+import Empty from '@components/Empty';
+
 type BottomTabParmList = {
   Home: undefined;
-  Listen: undefined;
+  ListenFake: undefined;
   MyAccount: undefined;
 };
 type BottomTabsRouteProp = RouteProp<RootStackParmList, 'MainStackParmList'>;
@@ -27,7 +29,7 @@ const getTitleName = (route: BottomTabsRouteProp): string => {
   switch (routeName) {
     case 'Home':
       return '首页';
-    case 'Listen':
+    case 'ListenFake':
       return '我听';
     case 'MyAccount':
       return '账户';
@@ -70,14 +72,15 @@ const BottomTabs: React.FC = () => {
         }}
       />
       <Screen
-        name="Listen"
-        component={PlayButton}
-        options={() => ({
+        name="ListenFake"
+        component={Empty}
+        options={({navigation}) => ({
           tabBarButton: () => {
-            console.log('bootom tabs');
             return (
               <PlayButton
-                onPress={() => navigation.navigate('Listen', {id: undefined})}
+                onPress={() => {
+                  navigation.navigate('Listen', {id: undefined});
+                }}
               />
             );
           },

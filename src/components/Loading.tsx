@@ -1,13 +1,12 @@
 import React from 'react';
 import {ActivityIndicator, StyleSheet} from 'react-native';
-import {viewportWidth, viewportHeight} from '@utils/index';
 import {useSelector} from 'react-redux';
 
 const styles = StyleSheet.create({
   loading: {
     position: 'absolute',
-    width: viewportWidth,
-    height: viewportHeight,
+    width: '100%',
+    height: '100%',
     backgroundColor: 'rgba(0,0,0,0.4)',
     elevation: 0,
   },

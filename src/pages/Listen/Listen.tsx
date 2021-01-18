@@ -13,6 +13,7 @@ const Listen: React.FC = () => {
   const {album, program} = useSelector((state) => state.palyInfo);
   const dispatch = useDispatch<Dispatch<PlayInfoAction>>();
   const id = route.params.id;
+  console.log('route', route);
   useEffect(() => {
     play(dispatch, id);
     // eslint-disable-next-line react-hooks/exhaustive-deps

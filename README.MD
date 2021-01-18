@@ -6,6 +6,12 @@
 # screenshot
 ![Login](./screenshot/login.jpg)![Home](./screenshot/home.jpg)
 ![Detail](./screenshot/detail.jpg)![Play](./screenshot/play.jpg)
+# CHANGE LOG
+* 1.0.1  
+  > 1.修复我的进入播放造成的闪退  
+  > 2.修复部分全面屏显示
+* 1.0.0  
+  > beta 初版本 
 # Running
 ## Clone & install
 * Clone this repo git clone 
