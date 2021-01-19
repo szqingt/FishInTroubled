@@ -1,5 +1,6 @@
-import React, {useState} from 'react';
+import React from 'react';
 import {StyleSheet, Animated, Easing, View, Platform} from 'react-native';
+import {Toast} from '@ant-design/react-native';
 import Icon from '@assets/iconfont';
 import {Slider} from '@miblanchard/react-native-slider';
 import SliderThumb from './SliderThumb';
@@ -65,6 +66,7 @@ const PlayBar: React.FC = () => {
   );
   const nextProgram = programList[currentIndex + 1];
   const prevProgram = programList[currentIndex - 1];
+  const hasProgramList = programList.length > 0;
 
   const onSliderEditStart = () => {
     stopPlayTimer();
@@ -78,14 +80,20 @@ const PlayBar: React.FC = () => {
 
   const onSliderEditEnd = (value: [number, number]) => {
     const [sec] = value;
-    setPlayTime(sec, dispatch);
+    if (hasProgramList) {
+      setPlayTime(sec, dispatch);
+    }
   };
 
   const nextHandler = () => {
     play(dispatch, nextProgram.program_id);
   };
   const playHandler = () => {
-    play(dispatch, program?.program_id);
+    if (hasProgramList) {
+      play(dispatch, program?.program_id);
+    } else {
+      Toast.fail('请从专辑页面选择要播放的节目！', 2);
+    }
   };
   const pauseHandler = () => {
     pause(dispatch);

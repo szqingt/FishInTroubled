@@ -6,6 +6,8 @@
 ![Login](./screenshot/login.jpg)![Home](./screenshot/home.jpg)
 ![Detail](./screenshot/detail.jpg)![Play](./screenshot/play.jpg)
 # CHANGE LOG
+* 1.0.2  
+  > 修复未选择节目拖动进度条闪退
 * 1.0.1  
   > 1.修复我的进入播放造成的闪退  
   > 2.修复部分全面屏显示
