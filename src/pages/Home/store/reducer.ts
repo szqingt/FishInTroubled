@@ -2,16 +2,15 @@ import {SET_ALBUM_LIST, SET_CAROUSEL_DATA} from './action';
 import {IHomeState} from './index';
 
 export interface Album {
-  title_file_url: string;
-  album_title: string;
-  album_id: string;
-  is_new: number; // 是否连载 1 是 0 否
-  is_free: number; // 是否付费 1 是 0 否
-  play_num: number; // 播放数量
-  update_time: string; // 更新时间
-  replay_num: number; // 评论
-  has_article: number; // 文章
-  serialize_status: number; // 是否连载
+  titleFilePath: string;
+  albumName: string;
+  albumId: string;
+  albumPrice: number; // 专辑价格
+  albumFlag: string[]; // 連載中 付費 更新
+  playNum: number;
+  replyNum: number;
+  updateTimeStr: string; // 更新时间
+  serializeStatus: number; // 是否连载
   scale: number; // 0 海外
 }
 

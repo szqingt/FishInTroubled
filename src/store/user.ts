@@ -70,7 +70,7 @@ export const login = (params: LoginParams) => async (dispatch: Dispatch) => {
   const user: IUserState = {
     isLogin: true,
     token: data.token,
-    userInfo: data.staff,
+    userInfo: data.user,
   };
   const {token, userInfo} = user;
   dispatch(setLogin());
@@ -82,8 +82,7 @@ export const login = (params: LoginParams) => async (dispatch: Dispatch) => {
 export const refreshUserInfo = async (dispatch: Dispatch) => {
   getUserInfo()
     .then((data) => {
-      const {staff} = data;
-      dispatch(setUserInfo(staff));
+      dispatch(setUserInfo(data));
     })
     .catch(() => {
       dispatch(setLogout());
@@ -92,22 +91,19 @@ export const refreshUserInfo = async (dispatch: Dispatch) => {
 
 export interface userInfo {
   account: string;
-  anchor_name: string | null;
-  avater_file_url: string | null;
-  countryName: string;
-  email?: string;
-  fans_lv: number | null;
+  areaName: string;
+  cash: number;
+  createTimeStr?: string;
+  email: string;
+  forumId?: string;
   gold: number;
-  is_ip_out: number;
-  is_locked: number;
-  is_out: number;
+  lockCash?: number;
   nickname: string;
-  role_id: string;
-  role_name: string;
-  staff_name: string;
-  staff_id: string;
-  total_gold: number;
-  total_listen_time: number;
+  totalGold: number;
+  totalListenTime: number;
+  totalMoney: number;
+  userId: string;
+  userNo?: number;
 }
 export interface IUserState {
   isLogin: boolean;
@@ -117,22 +113,15 @@ export interface IUserState {
 
 const defaultUserInfo: userInfo = {
   account: '',
-  anchor_name: null,
-  avater_file_url: null,
-  countryName: '',
+  userId: '',
+  areaName: '',
   email: '',
-  fans_lv: null,
+  cash: 0,
+  totalMoney: 0,
   gold: 0,
-  is_ip_out: 0,
-  is_locked: 0,
-  is_out: 0,
   nickname: '',
-  role_id: '',
-  role_name: '',
-  staff_id: '',
-  staff_name: '',
-  total_gold: 0,
-  total_listen_time: 0,
+  totalGold: 0,
+  totalListenTime: 0,
 };
 
 export const initState: IUserState = {

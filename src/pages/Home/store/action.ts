@@ -22,11 +22,11 @@ export const queryAlbumList = (params: IQueryParams) => {
     try {
       const data: any = await search(params);
       const {home} = store.getState();
-      const playload = data?.list?.albumList || [];
+      const playload = data?.records || [];
       if (params.loadMore) {
         dispatch({
           type: SET_ALBUM_LIST,
-          playload: [...playload, ...home.albumList],
+          playload: [...home.albumList, ...playload],
         });
       } else {
         dispatch({type: SET_ALBUM_LIST, playload});

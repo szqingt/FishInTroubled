@@ -34,8 +34,7 @@ const Home: React.FC = () => {
   const [isLoading, setLoading] = useState(false);
   const dispatch = useDispatch();
   const [queryParams, setQueryParams] = useState<IQueryParams>({
-    aclassify_id: 2,
-    page: 1,
+    pageIndex: 1,
     keyword: '',
     loadMore: false,
   });
@@ -62,16 +61,16 @@ const Home: React.FC = () => {
     setQueryParams({
       ...queryParams,
       keyword: '',
-      page: 1,
+      pageIndex: 1,
       loadMore: false,
     });
   };
 
   const onEndReached = () => {
-    const page = queryParams.page + 1;
+    const pageIndex = queryParams.pageIndex + 1;
     setQueryParams({
       ...queryParams,
-      page,
+      pageIndex,
       loadMore: true,
     });
   };
@@ -80,7 +79,7 @@ const Home: React.FC = () => {
     setQueryParams({
       ...queryParams,
       keyword,
-      page: 1,
+      pageIndex: 1,
       loadMore: false,
     });
   };
@@ -90,7 +89,7 @@ const Home: React.FC = () => {
     navigate('MainStackParmList', {
       screen: 'Detail',
       params: {
-        id: item.album_id,
+        id: item.albumId,
       },
     });
   };

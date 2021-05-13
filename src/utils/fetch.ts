@@ -13,7 +13,7 @@ const SUCCESS_CODE = 0;
 
 export interface DefaultResult<T> {
   data: T;
-  errCode: Number;
+  code: Number;
   message: string | null;
   success: Boolean;
 }
@@ -27,7 +27,7 @@ instance.interceptors.request.use(
     if (user.isLogin) {
       config.headers = {
         ...config.headers,
-        'x-basis-app-token': user.token,
+        'x-basis-token': user.token,
       };
     }
     if (config.isFormData) {
@@ -55,7 +55,7 @@ instance.interceptors.response.use(
       store.dispatch(hideLoading());
     }
 
-    if (data.errCode === SUCCESS_CODE) {
+    if (data.code === SUCCESS_CODE) {
       return data.data;
     }
     return Promise.reject<AxiosResponse>(response);

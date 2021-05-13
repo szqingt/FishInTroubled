@@ -1,7 +1,10 @@
 import {
   BUY_ALBUM,
+  BUY_PROGRAM,
   GET_ALBUM_INFO,
   GET_BACK_PASSWORD,
+  GET_PROGRAM_INFO,
+  GET_PROGRAM_LIST,
   GET_USER_INFO,
   LOGIN,
   SEARCH,
@@ -10,11 +13,10 @@ import fetch from '@utils/fetch';
 
 export interface SearchParams {
   keyword?: string;
-  aclassify_id: number;
-  page: number;
+  pageIndex: number;
 }
 
-function search(params: SearchParams = {page: 1, aclassify_id: 3}) {
+function search(params: SearchParams = {pageIndex: 1}) {
   return fetch({
     url: SEARCH,
     method: 'POST',
@@ -26,9 +28,8 @@ function search(params: SearchParams = {page: 1, aclassify_id: 3}) {
 
 export interface LoginParams {
   account: string;
-  password: string;
-  v_code: string;
-  version: 1;
+  passwordMd5: string;
+  version: string;
   isWeb: 1;
 }
 
@@ -64,7 +65,7 @@ function getAlbumInfo(id: string) {
     method: 'POST',
     isFormData: true,
     data: {
-      album_id: id,
+      albumId: id,
     },
   });
 }
@@ -75,9 +76,63 @@ function bugAlbum(id: string) {
     method: 'POST',
     isFormData: true,
     data: {
-      album_id: id,
+      albumId: id,
     },
   });
 }
 
-export {search, login, getUserInfo, findPassword, getAlbumInfo, bugAlbum};
+function bugProgram(id: string) {
+  return fetch({
+    url: BUY_PROGRAM,
+    method: 'POST',
+    isFormData: true,
+    data: {
+      programId: id,
+    },
+  });
+}
+
+export interface QueryProgramParams {
+  albumId: string;
+  pageIndex: number;
+}
+
+export interface ProgramApiResult {
+  current: number;
+  size: number;
+  pages: number;
+  total: number;
+  records: Progrma[];
+}
+
+function getProgramList(params: QueryProgramParams) {
+  return fetch<ProgramApiResult>({
+    url: GET_PROGRAM_LIST,
+    method: 'POST',
+    isFormData: true,
+    data: params,
+  });
+}
+
+function getProgramInfo(programId: string) {
+  return fetch<Progrma>({
+    url: GET_PROGRAM_INFO,
+    method: 'POST',
+    isFormData: true,
+    data: {
+      programId,
+    },
+  });
+}
+
+export {
+  search,
+  login,
+  getUserInfo,
+  findPassword,
+  getAlbumInfo,
+  bugAlbum,
+  getProgramList,
+  bugProgram,
+  getProgramInfo,
+};

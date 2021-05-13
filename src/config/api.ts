@@ -1,7 +1,10 @@
-export const SEARCH = '/app/album/search';
-export const GET_USER_INFO = '/app/staff/info';
-export const LOGIN = '/app/login';
+export const SEARCH = '/app/album/list';
+export const GET_USER_INFO = '/app/user/info';
+export const LOGIN = '/app/user/webLogin';
 export const CAPTACH = '/app/captcha.jpg';
 export const GET_BACK_PASSWORD = '/app/getBackPassword';
 export const GET_ALBUM_INFO = '/app/album/info';
-export const BUY_ALBUM = '/app/album/gain';
+export const GET_PROGRAM_LIST = '/app/program/list';
+export const GET_PROGRAM_INFO = '/app/program/info';
+export const BUY_ALBUM = '/app/pay/buyAlbum';
+export const BUY_PROGRAM = '/app/pay/buyProgram';

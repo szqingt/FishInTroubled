@@ -71,7 +71,7 @@ const PlayButton: React.FC<IProps> = ({onPress}) => {
             transform: [{rotate}],
           }}>
           <Image
-            source={album?.title_file_url ? {uri: album?.title_file_url} : LOGO}
+            source={album?.titleFilePath ? {uri: album?.titleFilePath} : LOGO}
             style={styles.image}
           />
         </Animated.View>
