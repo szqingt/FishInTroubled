@@ -52,21 +52,10 @@ const LoopView: React.FC = ({children}) => {
  */
 
 const PlayBar: React.FC = () => {
-  const {
-    playState,
-    playSeconds,
-    program,
-    programList,
-    soundDuration,
-  } = useSelector((state) => state.palyInfo);
-  const dispatch = useDispatch<Dispatch<PlayInfoAction>>();
-
-  const currentIndex = programList.findIndex(
-    (pro) => pro.program_id === program?.program_id,
+  const {playState, playSeconds, program, soundDuration} = useSelector(
+    (state) => state.palyInfo,
   );
-  const nextProgram = programList[currentIndex + 1];
-  const prevProgram = programList[currentIndex - 1];
-  const hasProgramList = programList.length > 0;
+  const dispatch = useDispatch<Dispatch<PlayInfoAction>>();
 
   const onSliderEditStart = () => {
     stopPlayTimer();
@@ -80,26 +69,20 @@ const PlayBar: React.FC = () => {
 
   const onSliderEditEnd = (value: [number, number]) => {
     const [sec] = value;
-    if (hasProgramList) {
+    if (program) {
       setPlayTime(sec, dispatch);
     }
   };
 
-  const nextHandler = () => {
-    play(dispatch, nextProgram.program_id);
-  };
   const playHandler = () => {
-    if (hasProgramList) {
-      play(dispatch, program?.program_id);
+    if (program) {
+      play(dispatch);
     } else {
       Toast.fail('请从专辑页面选择要播放的节目！', 2);
     }
   };
   const pauseHandler = () => {
     pause(dispatch);
-  };
-  const previousHandler = () => {
-    play(dispatch, prevProgram.program_id);
   };
 
   return (
@@ -119,12 +102,6 @@ const PlayBar: React.FC = () => {
         />
       </View>
       <View style={styles.control}>
-        <Touchable
-          onPress={previousHandler}
-          style={styles.button}
-          disabled={!prevProgram}>
-          <Icon name="icon-Prev" size={30} />
-        </Touchable>
         {playState === 'loading' && (
           <LoopView>
             <Icon name="icon-Loading" size={40} />
@@ -142,12 +119,6 @@ const PlayBar: React.FC = () => {
             <Icon name="icon-Play" size={50} />
           </Touchable>
         )}
-        <Touchable
-          onPress={nextHandler}
-          style={styles.button}
-          disabled={!nextProgram}>
-          <Icon name="icon-Next" size={30} />
-        </Touchable>
       </View>
     </View>
   );
@@ -161,7 +132,7 @@ const styles = StyleSheet.create({
   },
   control: {
     flexDirection: 'row',
-    justifyContent: 'space-between',
+    justifyContent: 'center',
     alignItems: 'center',
     marginVertical: 15,
     marginHorizontal: 60,

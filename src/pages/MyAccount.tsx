@@ -44,13 +44,11 @@ const MyAccount: React.FC = () => {
       ) : null}
       <List>
         <Item extra={userInfo.nickname}>昵称</Item>
-        <Item extra={userInfo.staff_name}>UID号</Item>
+        <Item extra={userInfo.userId}>UID号</Item>
         <Item extra={userInfo.email}>邮箱</Item>
-        <Item extra={userInfo.anchor_name}>标牌</Item>
-        <Item extra={userInfo.fans_lv}>等级</Item>
-        <Item extra={userInfo.countryName}>所在地</Item>
+        <Item extra={userInfo.areaName}>所在地</Item>
         <Item extra={coin(userInfo.gold)}>现有鱼币</Item>
-        <Item extra={coin(userInfo.total_gold)}>曾经鱼币</Item>
+        <Item extra={coin(userInfo.totalGold)}>曾经鱼币</Item>
         <Item onPress={findPassword} arrow="horizontal">
           密码找回
         </Item>

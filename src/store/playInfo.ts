@@ -1,11 +1,5 @@
 import {Dispatch} from 'redux';
-import {
-  sound,
-  initPlay,
-  playComplete,
-  stop,
-  getCurrentTime,
-} from '@utils/sound';
+import {sound, initPlay, stop, getCurrentTime} from '@utils/sound';
 import store from '@store/index';
 
 export const SET_PLAYSTATE = 'SET_PLAYSTATE';
@@ -24,13 +18,12 @@ export interface IPlayStateAction {
 
 export interface IPlayAlbumAction {
   type: SET_ALBUM_INFO;
-  album: AlbumInfo['albumInfo'];
-  programList: PlayProgram[];
+  album: AlbumInfo;
 }
 
 export interface IPlayProgramAction {
   type: SET_CURRENT_PROGRAM;
-  program: PlayProgram;
+  program: Progrma;
 }
 
 export interface IPlaySecondsAction {
@@ -42,26 +35,6 @@ export const setPlayState = (playState: PlayState): IPlayStateAction => ({
   type: SET_PLAYSTATE,
   playState,
 });
-
-export interface PlayProgram {
-  album_id: string;
-  file_net_encrypt_url: string;
-  file_net_high_url: string;
-  file_net_low_url: string;
-  file_net_url: string;
-  file_size: number; // 文件大小 单位M
-  file_url: string | null;
-  is_encrypt: number;
-  is_gain: string; // 1 已经购买 0 否
-  need_download: number;
-  play_num: number;
-  program_id: string;
-  program_name: string;
-  program_type: number;
-  replay_num: number;
-  thumbs_num: number;
-  update_time: string;
-}
 
 export type PlayState =
   | 'none'
@@ -76,9 +49,8 @@ export interface IPlayInfoState {
   playSeconds: number; // 当前播放长度
   soundDuration: number; // 声音的长度
   percent: number;
-  album: AlbumInfo['albumInfo'] | null; // 当前播放的专辑
-  program: PlayProgram | null; // 当前播放的节目
-  programList: PlayProgram[] | [];
+  album: AlbumInfo | null; // 当前播放的专辑
+  program?: Progrma; // 当前播放的节目
 }
 
 export const initState: IPlayInfoState = {
@@ -87,8 +59,6 @@ export const initState: IPlayInfoState = {
   soundDuration: 0,
   percent: 0,
   album: null,
-  program: null,
-  programList: [],
 };
 
 export type PlayInfoAction =
@@ -97,40 +67,50 @@ export type PlayInfoAction =
   | IPlayAlbumAction
   | IPlaySecondsAction;
 
-const getFileUrl = (program: PlayProgram) => {
-  const {
-    file_net_encrypt_url,
-    file_net_high_url,
-    file_net_low_url,
-    file_net_url,
-  } = program;
+const getFileUrl = (program: Progrma) => {
+  const {outFileUrl} = program;
 
-  return (
-    file_net_encrypt_url ||
-    file_net_high_url ||
-    file_net_low_url ||
-    file_net_url
-  );
+  return outFileUrl;
 };
 
-export const play = async (dispatch: Dispatch<PlayInfoAction>, id?: string) => {
+export const play = async (
+  dispatch: Dispatch<PlayInfoAction>,
+  newProgram?: Progrma,
+) => {
   try {
-    const {
-      programList,
-      program,
-      playState,
-      playSeconds,
-    } = store.getState().palyInfo;
-    const data = id
-      ? programList.find((item) => item.program_id === id)
-      : programList[0];
-    if (!data) {
-      console.log('get program error', programList);
+    const {program, playState, playSeconds} = store.getState().palyInfo;
+
+    // 需要更换播放的节目
+    if (newProgram && program?.programId !== newProgram.programId) {
+      dispatch({
+        type: SET_CURRENT_PROGRAM,
+        program: newProgram,
+      });
+      dispatch({
+        type: SET_PLAYSECCONDS,
+        sec: 0,
+      });
+      dispatch({
+        type: SET_PLAYSTATE,
+        playState: 'loading',
+      });
+
+      const path = getFileUrl(newProgram);
+      console.log('paly path:', path);
+      if (!path) {
+        throw new Error('get sound file path error!');
+      }
+      await initPlay(path);
+      dispatch({
+        type: SET_PLAYSTATE,
+        playState: 'playing',
+      });
+      playTimeLoop(dispatch);
+      sound.play();
       return;
     }
-
     // 恢复播放
-    if (playState === 'paused' && program?.program_id) {
+    if (playState === 'paused' && program) {
       dispatch({
         type: SET_PLAYSTATE,
         playState: 'playing',
@@ -140,38 +120,6 @@ export const play = async (dispatch: Dispatch<PlayInfoAction>, id?: string) => {
       playTimeLoop(dispatch);
       return;
     }
-
-    if (
-      (program?.program_id === data.program_id || !id) &&
-      (playState === 'loading' || playState === 'playing')
-    ) {
-      return;
-    }
-    dispatch({
-      type: SET_PLAYSECCONDS,
-      sec: 0,
-    });
-    dispatch({
-      type: SET_CURRENT_PROGRAM,
-      program: data,
-    });
-
-    dispatch({
-      type: SET_PLAYSTATE,
-      playState: 'loading',
-    });
-    const path = getFileUrl(data);
-    console.log('paly path:', path);
-    if (!path) {
-      throw new Error('get sound file path error!');
-    }
-    await initPlay(path);
-    dispatch({
-      type: SET_PLAYSTATE,
-      playState: 'playing',
-    });
-    playTimeLoop(dispatch);
-    autoNext(dispatch);
   } catch (e) {
     dispatch({
       type: SET_PLAYSTATE,
@@ -179,22 +127,6 @@ export const play = async (dispatch: Dispatch<PlayInfoAction>, id?: string) => {
     });
     console.log('play error:', e);
   }
-};
-
-const autoNext = async (dispatch: Dispatch<PlayInfoAction>) => {
-  await playComplete();
-  const {programList, program} = store.getState().palyInfo;
-  const currentIndex = programList.findIndex(
-    (item) => item.program_id === program?.program_id,
-  );
-  if (programList.length === currentIndex + 1) {
-    dispatch({
-      type: SET_PLAYSTATE,
-      playState: 'finish',
-    });
-    return;
-  }
-  play(dispatch, programList[currentIndex + 1].program_id);
 };
 
 export const stopPlay = async (dispatch: Dispatch) => {
@@ -263,7 +195,6 @@ export default (state = initState, action: PlayInfoAction): IPlayInfoState => {
       break;
     case SET_ALBUM_INFO:
       state.album = action.album;
-      state.programList = action.programList;
       break;
     case SET_CURRENT_PROGRAM:
       state.program = action.program;

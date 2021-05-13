@@ -9,8 +9,8 @@ type IProps = {
   onPress: (item: Album) => void;
 };
 
-const TextTag = (value: string, darkBg: boolean = false) => (
-  <View style={[styles.textTag, darkBg ? {backgroundColor: '#c3c3c3'} : null]}>
+const TextTag = (value: string) => (
+  <View style={styles.textTag} key={value}>
     <Text style={{fontSize: 12}}>{value}</Text>
   </View>
 );
@@ -23,36 +23,33 @@ const AlbumItem: React.FC<IProps> = ({item, onPress}) => {
     <Touchable onPress={press} style={styles.container}>
       <View style={styles.item}>
         <Image
-          source={item.title_file_url ? {uri: item.title_file_url} : LOGO}
+          source={item.titleFilePath ? {uri: item.titleFilePath} : LOGO}
           style={styles.image}
         />
         <View style={styles.rightView}>
           <View>
             <Text style={styles.titleText} numberOfLines={1}>
-              {item.album_title}
+              {item.albumName}
             </Text>
             <Text style={styles.remarkText} numberOfLines={1}>
-              更新时间:{item.update_time}
+              更新时间:{item.updateTimeStr}
             </Text>
           </View>
 
           <View style={styles.bottomView}>
-            {item.is_new ? TextTag('更新') : null}
-            {item.is_free ? TextTag('付费') : null}
-            {item.scale ? null : TextTag('海外', true)}
-            {item.serialize_status
-              ? TextTag('完结', true)
-              : TextTag('连载', true)}
+            {item.albumFlag.map((text) => {
+              return TextTag(text);
+            })}
           </View>
 
           <View style={styles.bottomView}>
             <View style={styles.playedView}>
               <Icon name="icon-Listen" size={14} />
-              <Text style={{marginLeft: 5}}>{item.play_num}</Text>
+              <Text style={{marginLeft: 5}}>{item.playNum}</Text>
             </View>
             <View style={styles.playingView}>
               <Icon name="icon-Comment" size={14} />
-              <Text style={{marginLeft: 5}}>{item.replay_num}</Text>
+              <Text style={{marginLeft: 5}}>{item.playNum}</Text>
             </View>
           </View>
         </View>

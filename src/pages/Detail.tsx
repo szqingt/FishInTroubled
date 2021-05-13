@@ -10,7 +10,12 @@ import {
 import {useRoute, RouteProp, useNavigation} from '@react-navigation/native';
 import {MainStackParmList} from 'navigator/MainStack';
 import {Button, Flex, Toast, WingBlank} from '@ant-design/react-native';
-import {bugAlbum, getAlbumInfo} from '@services/index';
+import {
+  bugAlbum,
+  getAlbumInfo,
+  getProgramList,
+  QueryProgramParams,
+} from '@services/index';
 import LOGO from '@assets/images/logo.png';
 import {getRandomColor} from '@utils/index';
 import Empty from '@components/Empty';
@@ -23,21 +28,19 @@ const ProgramItem = ({
   onPress,
 }: {
   item: Progrma;
-  onPress: (id: string) => void;
+  onPress: (progrma: Progrma) => void;
 }) => {
   const press = () => {
-    onPress(item.program_id);
+    onPress(item);
   };
   return (
     <Flex style={styles.programItem}>
       <Flex.Item>
-        <Text>{item.program_name}</Text>
-        <Text style={styles.rogramSubText}>
-          {item.file_size}M {'   ' + item.update_time}
-        </Text>
+        <Text>{item.programName}</Text>
+        <Text style={styles.rogramSubText}>{item.updateTimeStr}</Text>
       </Flex.Item>
       <View>
-        <Button size="small" disabled={item.is_gain !== '1'} onPress={press}>
+        <Button size="small" disabled={!item.hasProgram} onPress={press}>
           播放
         </Button>
       </View>
@@ -49,27 +52,59 @@ const Detail: React.FC = () => {
   const route = useRoute<RouteProp<MainStackParmList, 'Detail'>>();
   const id = route.params.id;
   const [albumInfo, setInfo] = useState<AlbumInfo>();
+  const [programList, setProgramList] = useState<Progrma[]>([]);
+  const [isEnd, setIsEnd] = useState<boolean>(false);
+  const [queryParams, setQueryParams] = useState<QueryProgramParams>({
+    pageIndex: 1,
+    albumId: id,
+  });
   const dispatch = useDispatch();
   const navigation = useNavigation<
     StackNavigationProp<MainStackParmList, 'Detail'>
   >();
 
   useEffect(() => {
-    getAlbumInfo(id).then((res) => {
-      setInfo(res as AlbumInfo);
-    });
-  }, [id]);
+    (async () => {
+      const alnumInfo = await getAlbumInfo(id);
+      setInfo(alnumInfo);
+      const {records} = await getProgramList(queryParams);
+      setProgramList(records);
+    })();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
+  useEffect(() => {
+    (async () => {
+      if (isEnd) {
+        return;
+      }
+      const {records, pages} = await getProgramList(queryParams);
+      if (queryParams.pageIndex === pages) {
+        setIsEnd(true);
+      }
+      setProgramList([...programList, ...records]);
+    })();
+
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [queryParams]);
 
   if (!albumInfo) {
     return null;
   }
 
-  const onPress = (programId: string) => {
-    navigation.navigate('Listen', {id: programId});
+  const onEndReached = () => {
+    const pageIndex = queryParams.pageIndex + 1;
+    setQueryParams({
+      ...queryParams,
+      pageIndex,
+    });
+  };
+
+  const onPress = (program: Progrma) => {
+    navigation.navigate('Listen', {id: program.programId});
     dispatch({
       type: SET_ALBUM_INFO,
-      album: albumDetil,
-      programList,
+      album: albumInfo,
     });
   };
 
@@ -77,11 +112,9 @@ const Detail: React.FC = () => {
     <ProgramItem item={item} onPress={onPress} />
   );
 
-  const {albumInfo: albumDetil, programList, albumTagList} = albumInfo;
-
   const gain = async () => {
     try {
-      await bugAlbum(albumDetil.album_id);
+      await bugAlbum(albumInfo.albumId);
       const newAlbumInfo = await getAlbumInfo(id);
       setInfo(newAlbumInfo);
       Toast.success('购买成功！');
@@ -97,38 +130,35 @@ const Detail: React.FC = () => {
           <View style={styles.albumCover}>
             <Image
               source={
-                albumDetil.title_file_url
-                  ? {uri: albumDetil.title_file_url}
-                  : LOGO
+                albumInfo.titleFilePath ? {uri: albumInfo.titleFilePath} : LOGO
               }
               style={styles.coverImage}
             />
           </View>
           <View style={styles.infoContainer}>
             <Text style={styles.titleText} numberOfLines={2}>
-              {albumDetil.album_title}
+              {albumInfo.albumName}
             </Text>
             <Text style={styles.descText} numberOfLines={3}>
-              {albumDetil.album_desc}
+              {albumInfo.albumDesc}
             </Text>
             <Text style={{color: 'green'}} numberOfLines={3}>
-              {albumDetil.serialize_status ? '完结' : '连载中'}
+              {albumInfo.serializeStatus ? '完结' : '连载中'}
             </Text>
           </View>
           <Flex.Item style={styles.opreationContainer}>
-            <Button
-              size="small"
-              onPress={gain}
-              disabled={albumDetil.is_gain === '1'}>
-              {albumDetil.is_gain === '1' ? '已购买' : '￥' + albumDetil.price}
+            <Button size="small" onPress={gain} disabled={!!albumInfo.hasAlbum}>
+              {albumInfo.hasAlbum ? '已购买' : '￥' + albumInfo.albumPrice}
             </Button>
           </Flex.Item>
         </Flex>
       </WingBlank>
       <Flex justify="start" wrap="wrap" style={{marginBottom: 10}}>
-        {albumTagList.map((tag) => (
-          <Text style={{...styles.tag, backgroundColor: getRandomColor()}}>
-            {tag.tag_name}
+        {albumInfo.albumTag.map((tagName) => (
+          <Text
+            key={tagName}
+            style={{...styles.tag, backgroundColor: getRandomColor()}}>
+            {tagName}
           </Text>
         ))}
       </Flex>
@@ -136,6 +166,8 @@ const Detail: React.FC = () => {
         data={programList}
         renderItem={WarpItem}
         ListEmptyComponent={Empty}
+        onEndReached={onEndReached}
+        onEndReachedThreshold={0.1}
       />
     </View>
   );
@@ -143,6 +175,7 @@ const Detail: React.FC = () => {
 
 const styles = StyleSheet.create({
   detailContainer: {
+    flex: 1,
     backgroundColor: '#fff',
   },
   albumContainer: {

@@ -1,29 +1,19 @@
 import {Button, InputItem, List, Toast} from '@ant-design/react-native';
-import {CAPTACH} from '@config/api';
-import {BASE_URL} from '@config/consts';
+import {IMAYU_VERSION} from '@config/consts';
 import React, {useState} from 'react';
-import {
-  StyleSheet,
-  ScrollView,
-  Text,
-  Image,
-  TouchableOpacity,
-  Keyboard,
-} from 'react-native';
+import {StyleSheet, ScrollView, Text, Keyboard} from 'react-native';
 import ButtonStyle from '@ant-design/react-native/lib/button/style';
 import {useDispatch} from 'react-redux';
+import md5 from 'js-md5';
 import {login} from '@store/user';
 /**
  * 登录page
  */
 
+console.log(md5);
 const Login: React.FC = () => {
-  const genVcodeUrl = () => BASE_URL + CAPTACH + '?t=' + Date.now();
-
   const [account, setAccount] = useState('');
   const [password, setPassword] = useState('');
-  const [vCode, setVCode] = useState('');
-  const [vCodeUri, setUri] = useState(genVcodeUrl);
   const dispatch = useDispatch();
 
   const handleSubmit = async () => {
@@ -31,13 +21,11 @@ const Login: React.FC = () => {
     try {
       await login({
         account,
-        password,
-        v_code: vCode,
+        passwordMd5: md5.hex(password),
         isWeb: 1,
-        version: 1,
+        version: IMAYU_VERSION,
       })(dispatch);
     } catch (error) {
-      setUri(genVcodeUrl());
       const {data} = error;
       Toast.fail(data.message || '登录错误!');
     }
@@ -61,24 +49,6 @@ const Login: React.FC = () => {
           onChange={(value) => setPassword(value)}
           placeholder="passowrd">
           密码
-        </InputItem>
-        <InputItem
-          clear
-          value={vCode}
-          maxLength={4}
-          extra={
-            <TouchableOpacity onPress={() => setUri(genVcodeUrl())}>
-              <Image
-                style={styles.vCode}
-                source={{
-                  uri: vCodeUri,
-                }}
-              />
-            </TouchableOpacity>
-          }
-          onChange={(value) => setVCode(value)}
-          placeholder="vCode">
-          验证码
         </InputItem>
       </List>
       <Button onPress={handleSubmit} style={styles.btn} styles={btnStyles}>

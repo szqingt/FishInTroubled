@@ -18,7 +18,7 @@ const CarouselItem = (
   {item}: {item: ICarousel},
   parallaxProps?: AdditionalParallaxProps,
 ) => {
-  const url = item.title_file_url || LOGO_URL;
+  const url = item.titleFilePath || LOGO_URL;
   return (
     <ParallaxImage
       source={{uri: url}}
@@ -54,9 +54,9 @@ const Pagination: React.FC<PaginationProps> = ({activeIndex, size}) => {
 };
 
 export type ICarousel = {
-  title_file_url: string;
-  album_title: string;
-  album_id: string;
+  titleFilePath: string;
+  albumName: string;
+  albumId: string;
 };
 
 type IProps = {
