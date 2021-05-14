@@ -7,6 +7,9 @@
 ![Login](./screenshot/login.jpg)![Home](./screenshot/home.jpg)
 ![Detail](./screenshot/detail.jpg)![Play](./screenshot/play.jpg)
 # CHANGE LOG
+* 1.0.3  
+  > 适配新版本api
+  > 添加app图标
 * 1.0.2  
   > 修复未选择节目拖动进度条闪退
 * 1.0.1  

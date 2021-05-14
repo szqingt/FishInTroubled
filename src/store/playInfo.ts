@@ -155,7 +155,6 @@ export const setPlayTime = (
 ) => {
   stopPlayTimer();
   sound.setCurrentTime(sec);
-  sound.play();
   playTimeLoop(dispatch);
 };
 
