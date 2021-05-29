@@ -8,6 +8,9 @@
 ![Detail](./screenshot/detail.jpg)![Play](./screenshot/play.jpg)
 # CHANGE LOG
 * 1.0.3  
+  > 支持单个节目购买
+  > 修复退出登录状态保持问题
+* 1.0.3  
   > 适配新版本api
   > 添加app图标
 * 1.0.2  
