@@ -12,6 +12,7 @@ import {MainStackParmList} from 'navigator/MainStack';
 import {Button, Flex, Toast, WingBlank} from '@ant-design/react-native';
 import {
   bugAlbum,
+  buyProgram,
   getAlbumInfo,
   getProgramList,
   QueryProgramParams,
@@ -40,9 +41,15 @@ const ProgramItem = ({
         <Text style={styles.rogramSubText}>{item.updateTimeStr}</Text>
       </Flex.Item>
       <View>
-        <Button size="small" disabled={!item.hasProgram} onPress={press}>
-          播放
-        </Button>
+        {item.hasProgram ? (
+          <Button size="small" onPress={press}>
+            播放
+          </Button>
+        ) : (
+          <Button size="small" onPress={press}>
+            ￥{item.programPrice}
+          </Button>
+        )}
       </View>
     </Flex>
   );
@@ -100,12 +107,23 @@ const Detail: React.FC = () => {
     });
   };
 
-  const onPress = (program: Progrma) => {
+  const goListen = (program: Progrma) => {
     navigation.navigate('Listen', {id: program.programId});
     dispatch({
       type: SET_ALBUM_INFO,
       album: albumInfo,
     });
+  };
+
+  const onPress = async (program: Progrma) => {
+    if (program.hasProgram) {
+      goListen(program);
+      return;
+    }
+
+    await buyProgram(program.programId);
+    Toast.success('购买成功！');
+    goListen(program);
   };
 
   const WarpItem = ({item}: ListRenderItemInfo<Progrma>) => (
@@ -119,6 +137,7 @@ const Detail: React.FC = () => {
       setInfo(newAlbumInfo);
       Toast.success('购买成功！');
     } catch (e) {
+      console.log(e);
       const {data} = e;
       Toast.fail(data.message || '购买失败!');
     }

@@ -28,6 +28,7 @@ instance.interceptors.request.use(
       config.headers = {
         ...config.headers,
         'x-basis-token': user.token,
+        'x-basis-client': 'WEB',
       };
     }
     if (config.isFormData) {

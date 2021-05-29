@@ -81,7 +81,7 @@ function bugAlbum(id: string) {
   });
 }
 
-function bugProgram(id: string) {
+function buyProgram(id: string) {
   return fetch({
     url: BUY_PROGRAM,
     method: 'POST',
@@ -133,6 +133,6 @@ export {
   getAlbumInfo,
   bugAlbum,
   getProgramList,
-  bugProgram,
+  buyProgram,
   getProgramInfo,
 };
