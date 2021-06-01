@@ -120,10 +120,15 @@ const Detail: React.FC = () => {
       goListen(program);
       return;
     }
-
-    await buyProgram(program.programId);
-    Toast.success('购买成功！');
-    goListen(program);
+    try {
+      await buyProgram(program.programId);
+      Toast.success('购买成功！');
+      goListen(program);
+    } catch (e) {
+      console.log(e);
+      const {data} = e;
+      Toast.fail(data.message || '购买失败!');
+    }
   };
 
   const WarpItem = ({item}: ListRenderItemInfo<Progrma>) => (

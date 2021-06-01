@@ -36,7 +36,7 @@ const playComplete = () => {
 };
 
 const stop = () => {
-  return new Promise((resolve, reject) => {
+  return new Promise<void>((resolve, reject) => {
     if (sound) {
       sound.stop(() => {
         resolve();

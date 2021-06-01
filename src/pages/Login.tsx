@@ -10,7 +10,6 @@ import {login} from '@store/user';
  * 登录page
  */
 
-console.log(md5);
 const Login: React.FC = () => {
   const [account, setAccount] = useState('');
   const [password, setPassword] = useState('');

@@ -1,4 +1,5 @@
 import axios, {AxiosResponse} from 'axios';
+import { decode } from 'js-base64';
 import {BASE_URL} from '@config/consts';
 import store from '@store/index';
 import {showLoading, hideLoading} from '@store/loading';
@@ -13,6 +14,7 @@ const SUCCESS_CODE = 0;
 
 export interface DefaultResult<T> {
   data: T;
+  dataEncrypt: string;
   code: Number;
   message: string | null;
   success: Boolean;
@@ -55,9 +57,8 @@ instance.interceptors.response.use(
     if (!config.withoutMask) {
       store.dispatch(hideLoading());
     }
-
     if (data.code === SUCCESS_CODE) {
-      return data.data;
+      return data.data || JSON.parse(decode(data.dataEncrypt));
     }
     return Promise.reject<AxiosResponse>(response);
   },
